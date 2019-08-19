@@ -3,23 +3,23 @@ import cvxpy as cp
 import numpy as np
 from basis_generator import generate_basis
 
-dim = 10
-sequences = [[0,1],[0,2],[1,2]]
-X_basis = generate_basis(dim, sequences)
+dim = 2
+sequences = [[1,2], [1,3], [2,3]]
+X_basis, __ = generate_basis(dim, sequences)
 
-alpha = cp.Variable((len(X_basis),1))
+alpha = cp.Variable((len(X_basis), 1))
 
-n = 3
 # Generate a random SDP.
 C = np.array([
-        [0, 1, -1],
-        [1, 0, 1],
-        [-1, 1, 0]
+        [0, 0, 0, 0],
+        [0, 0, 1, -1],
+        [0, 1, 0, 1],
+        [0, -1, 1, 0]
 ])
 
 # Define and solve the CVXPY problem.
 # Create a symmetric matrix variable.
-X = cp.Variable((n,n), symmetric=True)
+X = cp.Variable((np.array(sequences).max()+1, np.array(sequences).max()+1), symmetric=True)
 # The operator >> denotes matrix inequality.
 constraints = [X >> 0]
 constraints += [
