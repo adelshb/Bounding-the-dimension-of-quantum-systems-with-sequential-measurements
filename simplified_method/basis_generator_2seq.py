@@ -12,10 +12,10 @@ def generate_basis(dim,
 
 def rand_moment(dim,
             sequences,
-            all_seq = True):
+            all_sequences = True):
 
     num_obs = np.array(sequences).max()
-    if all_seq==True:
+    if all_sequences==True:
         sequences = all_seq(num_obs+1, r=2)
 
     rho = rand_rho(dim)

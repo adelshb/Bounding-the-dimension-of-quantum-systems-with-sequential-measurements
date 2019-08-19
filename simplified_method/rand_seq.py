@@ -1,5 +1,5 @@
 import numpy as np
-from basis_generator import generate_basis, all_seq
+from basis_generator_2seq import generate_basis, all_seq
 
 def rank(basis_size=20,
             n_max = 10,
@@ -14,11 +14,12 @@ def rank(basis_size=20,
             rank_dim.append(rank_temp)
         rank.append(rank_dim)
     X = np.array(rank)
+    print(X)
     return X
 
-basis_size=20
+basis_size=100
 n_max = 10
-dim_max = 10
+dim_max = 5
 
 rank(basis_size=basis_size,
     n_max = n_max,

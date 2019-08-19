@@ -1,12 +1,13 @@
 # Import packages.
 import cvxpy as cp
 import numpy as np
-from basis_generator import generate_basis
+from basis_generator_2seq import generate_basis
 
 dim = 2
 sequences = [[1,2], [1,3], [2,3]]
 n = np.array(sequences).max()+1
-X_basis, __ = generate_basis(dim, sequences)
+X_basis, rank = generate_basis(dim, sequences)
+print(rank)
 
 alpha = cp.Variable((len(X_basis), 1))
 
