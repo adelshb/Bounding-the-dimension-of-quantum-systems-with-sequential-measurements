@@ -3,11 +3,11 @@ import cvxpy as cp
 import numpy as np
 from basis_generator import generate_basis
 
-dim = 2
+dim = 10
 sequences = [[0,1],[0,2],[1,2]]
-basis = generate_basis(dim, sequences)
+X_basis = generate_basis(dim, sequences)
 
-alpha = cp.Variable((len(basis),1))
+alpha = cp.Variable((len(X_basis),1))
 
 n = 3
 # Generate a random SDP.
@@ -26,7 +26,7 @@ constraints += [
     X[i,i] == 1 for i in range(n)
 ]
 constraints += [
-    X == sum([alpha[i]*basis[i] for i in range(len(basis))])
+    X == sum([alpha[i]*X_basis[i] for i in range(len(X_basis))])
 ]
 prob = cp.Problem(cp.Maximize(cp.trace(C@X)/2),
                   constraints)
