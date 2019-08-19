@@ -5,6 +5,7 @@ from basis_generator import generate_basis
 
 dim = 2
 sequences = [[1,2], [1,3], [2,3]]
+n = np.array(sequences).max()+1
 X_basis, __ = generate_basis(dim, sequences)
 
 alpha = cp.Variable((len(X_basis), 1))
@@ -19,7 +20,7 @@ C = np.array([
 
 # Define and solve the CVXPY problem.
 # Create a symmetric matrix variable.
-X = cp.Variable((np.array(sequences).max()+1, np.array(sequences).max()+1), symmetric=True)
+X = cp.Variable((n,n), symmetric=True)
 # The operator >> denotes matrix inequality.
 constraints = [X >> 0]
 constraints += [
