@@ -5,9 +5,10 @@ from scipy.stats import unitary_group
 def generate_basis(dim,
                 num_obs,
                 len_seq,
+                out_max = 1,
                 basis_size=100):
 
-    X_basis = [rand_moment(dim, num_obs, len_seq) for __ in range(basis_size)]
+    X_basis = [rand_moment(dim, num_obs, len_seq, out_max) for __ in range(basis_size)]
     rank = rank_basis(X_basis)
     return X_basis, rank
 
@@ -36,9 +37,10 @@ def generate_basis(dim,
 
 def rand_moment(dim,
              num_obs,
-             len_seq):
+             len_seq,
+             out_max):
 
-    sequences = all_seq(num_obs, r_max=len_seq)
+    sequences = all_seq(num_obs, r_max=len_seq, out_max=out_max)
 
     rho = rand_rho(dim)
 
@@ -77,12 +79,12 @@ def rank_basis(X_basis):
     rank = np.linalg.matrix_rank(X)
     return rank
 
-def all_seq(n,r_max=2):
+def all_seq(n,r_max=2, out_max=1):
     arr = [i for i in range(n)]
     seq = []
     for r in range(1,r_max+1):
         settings = list(product(arr, repeat=r))
-        outcomes = list(product([0,1], repeat=r))
+        outcomes = list(product([i for i in range(out_max+1)], repeat=r))
         seq.append([(r,s) for r in outcomes for s in settings])
     seq = sum(seq,[])
     return seq
