@@ -48,14 +48,17 @@ def rand_moment(dim,
     for k in range(num_obs):
         P_temp = rand_proj(dim)
         P.append(P_temp)
+    P.append(np.eye(dim))
 
-    X = np.eye(len(sequences))
+    X = np.eye(len(sequences)+1)
     for i, seq_row in enumerate(sequences):
         Pi = proj_mul([P[k] for k in seq_row[1]], seq_row[0])
-        for j, seq_col in enumerate(sequences[i+1:]):
+        X[0,i+1] = np.trace(Pi @ np.eye(dim) @ rho)
+        X[i+1,0] = np.trace(np.eye(dim) @ np.conjugate(Pi.T) @ rho)
+        for j, seq_col in enumerate(sequences):
             Pj= proj_mul([P[k] for k in seq_col[1]], seq_col[0])
-            X[i,j] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
-            X[j,i] = X[i,j]
+            X[i+1,j+1] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
+            #X[j,i] = np.conjugate(X[i,j])
     return X
 
 def rand_proj(dim):

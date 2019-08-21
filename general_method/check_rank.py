@@ -1,10 +1,10 @@
 import numpy as np
 from basis_generator_nseq import generate_basis
 
-dim = 4
-num_obs = 4
-len_seq = 4
-basis_size=5000
+dim = 2
+num_obs = 5
+len_seq = 2
+basis_size=150
 
 __, r = generate_basis(dim=dim,
                 num_obs=num_obs,
