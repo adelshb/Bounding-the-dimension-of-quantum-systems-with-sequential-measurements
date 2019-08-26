@@ -25,14 +25,12 @@ def rand_moment(dim=2,
         sequences = sep_seq(num_m=num_obs, num_p=len_seq, out_max=out_max)
         num_obs = num_obs * len_seq
 
-
     rho = rand_rho(dim)
 
     P = []
     for k in range(num_obs):
         P_temp = rand_proj(dim)
         P.append(P_temp)
-    P.append(np.eye(dim))
 
     X = np.eye(len(sequences)+1)
     for i, seq_row in enumerate(sequences):
@@ -46,7 +44,7 @@ def rand_moment(dim=2,
 
 def rand_proj(dim):
     if dim==2:
-        D = np.array([[1, 0],[ 0, 0]])
+        D = np.array([[1, 0],[0, 0]])
     else:
         D = np.random.randint(2, size=dim)*np.eye(dim)
     if dim == 1:

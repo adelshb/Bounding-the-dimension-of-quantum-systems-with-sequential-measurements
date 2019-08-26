@@ -4,10 +4,10 @@ import numpy as np
 from basis_generator_nseq import generate_basis, sep_seq
 
 dim = 2
-num_obs = 2 # number of measurements per position! 
+num_obs = 2 # number of measurements per position!
 len_seq = 3
 out_max = 1
-basis_size= 170
+basis_size= 160
 seq_method="sep_seq"
 GYN_events = [((0, 0, 0), (0, 2, 4)),
             ((1, 1, 0), (0, 3, 5)),
