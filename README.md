@@ -10,6 +10,17 @@
  pip install -r requirements.txt
  ```
 
+ ### Example: Save the basis of moment matrices.
+
+ ```shell
+python save_basis.py \
+   --dim 2 \
+   --num_obs 3 \
+   --len_seq 2 \
+   --basis_size 10 \
+   --save True
+ ```
+
  ### Example: Find the maximum violation of the Leggett-Garg inequality.
 
  ```shell

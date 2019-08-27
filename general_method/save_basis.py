@@ -6,23 +6,24 @@ import timeit
 
 from basis_generator_nseq import generate_basis, rank_basis
 
+# Example:
+# python save_basis.py \
+#     --dim 2 \
+#     --num_obs 3 \
+#     --len_seq 2 \
+#     --basis_size 10 \
+#     --save False
+
 def main(args):
 
-    dim = 2
-    num_obs = 6
-    len_seq = 2
-    basis_size = 10
-    meta_data = {}
-
     start = timeit.default_timer()
-
     X_basis = []
     Done = False
     while Done==False:
-        X, __ = generate_basis(dim=dim,
-                        num_obs=num_obs,
-                        len_seq=len_seq,
-                        basis_size=basis_size)
+        X, __ = generate_basis(dim=args.dim,
+                        num_obs=args.num_obs,
+                        len_seq=args.len_seq,
+                        basis_size=args.basis_size)
         X_basis = X_basis + X
         rank = rank_basis(X_basis)
         if rank < len(X_basis):
@@ -39,39 +40,48 @@ def main(args):
 
     stop = timeit.default_timer()
 
-    meta_data["dimension"] = dim
-    meta_data["maximum length of sequences"] = len_seq
-    meta_data["num of observables"] = num_obs
-    meta_data["time"] = stop - start
-    meta_data["rank"] = int(rank_new)
-    meta_data["number of elements"] = len(X_new_basis)
+    if args.save == True:
+        meta_data = {}
+        meta_data["dimension"] = args.dim
+        meta_data["maximum length of sequences"] = args.len_seq
+        meta_data["num of observables"] = args.num_obs
+        meta_data["time"] = stop - start
+        meta_data["rank"] = int(rank_new)
+        meta_data["number of elements"] = len(X_new_basis)
 
-    dir_name = "data_basis/"
-    NAME = '{}-dim-{}-num_obs-{}-len_seq'.format(dim, num_obs, len_seq)
+        dir_name = "data_basis/"
+        NAME = '{}-dim-{}-num_obs-{}-len_seq'.format(args.dim, args.num_obs, args.len_seq)
 
-    with open(dir_name + NAME + '-meta_data.json', 'w') as fp:
-        json.dump(meta_data, fp)
+        with open(dir_name + NAME + '-meta_data.json', 'w') as fp:
+            json.dump(meta_data, fp)
 
-    np.save(dir_name + NAME, X_new_basis)
+        np.save(dir_name + NAME, X_new_basis)
 
+    elif args.save == False:
+        print("The rank is {}".format(rank_new))
+
+    print("Done!")
+
+def str2bool(v):
+    if isinstance(v, bool):
+       return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 if __name__ == "__main__":
     parser = ArgumentParser()
 
-    # Data parameters
-    parser.add_argument("--dim", type=list, default=["W", "GHZ"])
-    parser.add_argument("--data_size", type=int, default=100000)
-    parser.add_argument("--num_qubits", type=int, default=3)
-    parser.add_argument("--classification", type=str, default="SLOCC", choices=["LOCC", "SLOCC"])
-    parser.add_argument("--sv_ratio_th", type=float, default=0.5)
-    parser.add_argument("--method", type=str, default="random")
-
-    # Training parameters
-    parser.add_argument("--learning_rate", type=float, default=0.01)
-    parser.add_argument("--batch_size", type=int, default=128)
-    parser.add_argument("--epochs", type=int, default=10)
-    parser.add_argument("--validation_split", type=float, default=0.2)
-    parser.add_argument("--shuffle", type=bool, default=True)
+    parser.add_argument("--dim", type=int, default=2)
+    parser.add_argument("--num_obs", type=int, default=3)
+    parser.add_argument("--len_seq", type=int, default=2)
+    parser.add_argument("--basis_size", type=int, default=10)
+    #parser.add_argument("--save", type=bool, default=False)
+    parser.add_argument("--save", type=str2bool, nargs='?',
+                        const=True, default=False)
 
     args = parser.parse_args()
     main(args)
