@@ -11,7 +11,7 @@ from basis_generator_nseq import generate_basis, rank_basis
 #     --dim 2 \
 #     --num_obs 3 \
 #     --len_seq 2 \
-#     --basis_size 10 \
+#     --batch_size 10 \
 #     --save False
 
 def main(args):
@@ -23,7 +23,8 @@ def main(args):
         X, __ = generate_basis(dim=args.dim,
                         num_obs=args.num_obs,
                         len_seq=args.len_seq,
-                        basis_size=args.basis_size)
+                        out_max = args.out_max,
+                        batch_size=args.batch_size)
         X_basis = X_basis + X
         rank = rank_basis(X_basis)
         if rank < len(X_basis):
@@ -58,6 +59,7 @@ def main(args):
         np.save(dir_name + NAME, X_new_basis)
 
     elif args.save == False:
+        print("The running time is {}".format(stop - start))
         print("The rank is {}".format(rank_new))
 
     print("Done!")
@@ -78,8 +80,8 @@ if __name__ == "__main__":
     parser.add_argument("--dim", type=int, default=2)
     parser.add_argument("--num_obs", type=int, default=3)
     parser.add_argument("--len_seq", type=int, default=2)
-    parser.add_argument("--basis_size", type=int, default=10)
-    #parser.add_argument("--save", type=bool, default=False)
+    parser.add_argument("--out_max", type=int, default=1)
+    parser.add_argument("--batch_size", type=int, default=10)
     parser.add_argument("--save", type=str2bool, nargs='?',
                         const=True, default=False)
 

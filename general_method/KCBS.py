@@ -1,7 +1,7 @@
 # Import packages.
 import cvxpy as cp
 import numpy as np
-from basis_generator_nseq import generate_basis, all_seq
+from basis_generator import generate_basis, all_seq
 
 dim = 2
 num_obs = 5

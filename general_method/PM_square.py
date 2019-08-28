@@ -1,7 +1,7 @@
 # Import packages.
 import cvxpy as cp
 import numpy as np
-from basis_generator_nseq import generate_basis, sep_seq
+from basis_generator import generate_basis, sep_seq
 
 dim = 2
 num_obs = 3 # number of measurements per position!

@@ -13,10 +13,11 @@
  ### Example: Save the basis of moment matrices.
 
  ```shell
-python save_basis.py \
+python save_basis_multi-cores.py \
    --dim 2 \
    --num_obs 3 \
    --len_seq 2 \
+   --out_max 1 \
    --basis_size 10 \
    --save True
  ```
