@@ -26,13 +26,18 @@ def main(args):
     start = timeit.default_timer()
     X_basis = []
     Done = False
+    init = True
     while Done==False:
 
-        X = pool.starmap(generate_basis, input*args.batch_size)
+        if init == True:
+            X = pool.starmap(generate_basis, input*args.batch_init)
+        else:
+            X = pool.starmap(generate_basis, input*args.batch_size)
         X = sum(X,[])
 
         X_basis = X_basis + X
         rank = rank_basis(X_basis)
+        print("The current basis size is {}".format(len(X_basis)))
         if rank < len(X_basis):
             Done = True
 
@@ -65,13 +70,8 @@ def main(args):
 
         np.save(dir_name + NAME, X_new_basis)
 
-        print("The running time is {}".format(stop - start))
-        print("The rank is {}".format(rank_new))
-
-    elif args.save == False:
-        print("The running time is {}".format(stop - start))
-        print("The rank is {}".format(rank_new))
-
+    print("The running time is {}".format(stop - start))
+    print("The rank is {}".format(rank_new))
     print("Done!")
 
 def str2bool(v):
@@ -91,7 +91,8 @@ if __name__ == "__main__":
     parser.add_argument("--num_obs", type=int, default=3)
     parser.add_argument("--len_seq", type=int, default=2)
     parser.add_argument("--out_max", type=int, default=1)
-    parser.add_argument("--batch_size", type=int, default=10)
+    parser.add_argument("--batch_init", type=int, default=100)
+    parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--save", type=str2bool, nargs='?',
                         const=True, default=False)
 
