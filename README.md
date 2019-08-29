@@ -18,7 +18,8 @@ python save_basis_multi-cores.py \
    --num_obs 3 \
    --len_seq 2 \
    --out_max 1 \
-   --basis_size 10 \
+   --batch_init 100 \
+   --basis_size 20 \
    --save True
  ```
 

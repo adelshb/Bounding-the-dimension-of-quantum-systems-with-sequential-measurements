@@ -14,7 +14,9 @@ from basis_generator import generate_basis, rank_basis
 #     --num_obs 3 \
 #     --len_seq 2 \
 #     --out_max 1 \
-#     --batch_size 10 \
+#     --batch_init 100 \
+#     --batch_size 20 \
+#     --dtype float16
 #     --save False
 
 def main(args):
@@ -37,7 +39,6 @@ def main(args):
 
         X_basis = X_basis + X
         rank = rank_basis(X_basis)
-        print("The current basis size is {}".format(len(X_basis)))
         if rank < len(X_basis):
             Done = True
 
@@ -61,6 +62,7 @@ def main(args):
         meta_data["rank"] = int(rank_new)
         meta_data["number of elements"] = len(X_new_basis)
         meta_data["moment size"] = X_new_basis[0].shape
+        meta_data["dtype"] = args.dtype
 
         dir_name = "data_basis/"
         NAME = '{}-dim-{}-num_obs-{}-len_seq'.format(args.dim, args.num_obs, args.len_seq)
@@ -68,7 +70,7 @@ def main(args):
         with open(dir_name + NAME + '-meta_data.json', 'w') as fp:
             json.dump(meta_data, fp)
 
-        np.save(dir_name + NAME, X_new_basis)
+        np.save(dir_name + NAME, [X.astype(np.dtype(args.dtype), copy=False) for X in X_new_basis])
 
     print("The running time is {}".format(stop - start))
     print("The rank is {}".format(rank_new))
@@ -93,6 +95,7 @@ if __name__ == "__main__":
     parser.add_argument("--out_max", type=int, default=1)
     parser.add_argument("--batch_init", type=int, default=100)
     parser.add_argument("--batch_size", type=int, default=20)
+    parser.add_argument("--dtype", type=str, default="float16")
     parser.add_argument("--save", type=str2bool, nargs='?',
                         const=True, default=False)
 
