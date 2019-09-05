@@ -119,7 +119,6 @@ def sep_seq(num_m=2,
 def proj_mul(listP, outcomes):
     Proj = np.eye(listP[0][0].shape[0])
     for i, P in enumerate(listP):
-        print(type(P))
         Proj = Proj @ P[outcomes[i]]
     return Proj
 
@@ -130,7 +129,7 @@ def random_ints_with_sum(dim, num):
             yield dim
             break
         else:
-            r = random.randint(0, dim)
+            r = random.randint(0, dim - (num - count) + 1)
             yield r
             count += 1
             dim -= r
