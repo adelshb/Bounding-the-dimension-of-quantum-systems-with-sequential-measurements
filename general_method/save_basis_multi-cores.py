@@ -65,7 +65,7 @@ def main(args):
         meta_data["dtype"] = args.dtype
 
         dir_name = "data_basis/"
-        NAME = '{}-dim-{}-num_obs-{}-len_seq'.format(args.dim, args.num_obs, args.len_seq)
+        NAME = '{}-dim-{}-num_obs-{}-len_seq-{}-out_max'.format(args.dim, args.num_obs, args.len_seq, args.out_max)
 
         with open(dir_name + NAME + '-meta_data.json', 'w') as fp:
             json.dump(meta_data, fp)
