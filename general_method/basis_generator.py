@@ -62,7 +62,7 @@ def rand_projs(dim, out_max):
     elif dim==2:
         D = np.array([[1, 0],[0, 0]])
         U = unitary_group.rvs(dim)
-        return U @ D @ np.conjugate(U.T)
+        return [U @ D @ np.conjugate(U.T), U @ (np.eye(dim)-D) @ np.conjugate(U.T)]
     elif dim>2:
         projs = []
         eigenvals = list(random_ints_with_sum(dim, out_max + 1))
