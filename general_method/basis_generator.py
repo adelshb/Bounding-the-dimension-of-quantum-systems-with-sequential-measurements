@@ -1,6 +1,7 @@
 import numpy as np
 from itertools import combinations, product
 import scipy
+import random
 from scipy.stats import unitary_group
 
 import warnings
@@ -13,6 +14,10 @@ def generate_basis(dim,
                 batch_size=100,
                 seq_method="all_sequences",
                 compute_rank = True):
+
+    if out_max + 1 > dim:
+        print("Dimension is not high enough.")
+        return
 
     scipy.random.seed()
     X_basis = [rand_moment(dim, num_obs, len_seq, out_max, seq_method=seq_method) for __ in range(batch_size)]
@@ -38,7 +43,7 @@ def rand_moment(dim=2,
 
     P = []
     for k in range(num_obs):
-        P_temp = rand_proj(dim)
+        P_temp = rand_projs(dim, out_max)
         P.append(P_temp)
 
     X = np.eye(len(sequences)+1)
@@ -51,16 +56,22 @@ def rand_moment(dim=2,
             X[i+1,j+1] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
     return X
 
-def rand_proj(dim):
-    if dim==2:
-        D = np.array([[1, 0],[0, 0]])
-    else:
-        D = np.random.randint(2, size=dim)*np.eye(dim)
+def rand_projs(dim, out_max):
     if dim == 1:
         return 1
-    else:
+    elif dim==2:
+        D = np.array([[1, 0],[0, 0]])
         U = unitary_group.rvs(dim)
         return U @ D @ np.conjugate(U.T)
+    elif dim>2:
+        projs = []
+        eigenvals = list(random_ints_with_sum(dim, out_max + 1))
+        for j,val in enumerate(eigenvals):
+            vec_temp = [0]*sum(eigenvals[:j]) + [1]*val + [0]*sum(eigenvals[j+1:])
+            projs.append(vec_temp*np.eye(dim))
+
+        U = unitary_group.rvs(dim)
+        return [U @ D @ np.conjugate(U.T) for D in projs]
 
 def rand_rho(dim):
     psi = np.array([1] + [0]*(dim-1))
@@ -105,11 +116,21 @@ def sep_seq(num_m=2,
     seq = sum(seq,[])
     return seq
 
-def proj_mul(listP, outcome):
-    Proj = np.eye(listP[0].shape[0])
+def proj_mul(listP, outcomes):
+    Proj = np.eye(listP[0][0].shape[0])
     for i, P in enumerate(listP):
-        if outcome[i] == 1:
-            Proj = Proj @ P
-        elif outcome[i] == 0:
-            Proj = Proj @ (np.eye(listP[0].shape[0]) - P)
+        print(type(P))
+        Proj = Proj @ P[outcomes[i]]
     return Proj
+
+def random_ints_with_sum(dim, num):
+    count=0
+    while dim > 0:
+        if count == num-1:
+            yield dim
+            break
+        else:
+            r = random.randint(0, dim)
+            yield r
+            count += 1
+            dim -= r
