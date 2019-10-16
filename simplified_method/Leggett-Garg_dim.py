@@ -1,9 +1,9 @@
 # Import packages.
 import cvxpy as cp
 import numpy as np
-from basis_generator_2seq import generate_basis
+from basis_generator_simp import generate_basis
 
-dim = 2
+dim = 3
 sequences = [[1,2], [1,3], [2,3]]
 n = np.array(sequences).max()+1
 X_basis, rank = generate_basis(dim, sequences)
@@ -36,5 +36,5 @@ prob.solve()
 
 # Print result.
 print("The optimal value is", prob.value)
-print("A solution X is")
-print(X.value)
+#print("A solution X is")
+#print(X.value)

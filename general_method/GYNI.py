@@ -1,21 +1,26 @@
 # Import packages.
 import cvxpy as cp
 import numpy as np
-from basis_generator import generate_basis, sep_seq
+from basis_generator import generate_basis, sep_seq, all_seq
 
 dim = 2
-num_obs = 2 # number of measurements per position!
+num_obs = 3 # number of measurements per position!
 len_seq = 3
 out_max = 1
-basis_size= 160
-seq_method="sep_seq"
+basis_size= 50
+#seq_method="sep_seq"
+seq_method="all_sequences"
 GYN_events = [((0, 0, 0), (0, 2, 4)),
             ((1, 1, 0), (0, 3, 5)),
             ((0, 1, 1), (1, 2, 5)),
             ((1, 0, 1), (1, 3, 4)),
                 ]
-sequences = sep_seq(num_m=num_obs,
-            num_p=len_seq,
+# sequences = sep_seq(num_m=num_obs,
+#             num_p=len_seq,
+#             out_max=out_max)
+
+sequences = all_seq(n=num_obs,
+            r_max=len_seq,
             out_max=out_max)
 
 n = len(sequences)
