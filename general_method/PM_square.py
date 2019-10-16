@@ -4,12 +4,35 @@ import numpy as np
 from basis_generator import generate_basis, sep_seq
 
 dim = 2
-num_obs = 3 # number of measurements per position!
+num_obs = 9 # number of measurements per position!
 len_seq = 3
 out_max = 1
 basis_size= 300
-seq_method="sep_seq"
-PMS_events = [
+seq_method="all_sequences"
+PMS_events = [((0, 0, 0), (0, 1, 2)),
+            ((0, 1, 1), (0, 1, 2)),
+            ((1, 0, 1), (0, 1, 2)),
+            ((1, 1, 0), (0, 1, 2)),
+            ((0, 0, 0), (3, 4, 5)),
+            ((0, 1, 1), (3, 4, 5)),
+            ((1, 0, 1), (3, 4, 5)),
+            ((1, 1, 0), (3, 4, 5)),
+            ((0, 0, 0), (6, 7, 8)),
+            ((0, 1, 1), (6, 7, 8)),
+            ((1, 0, 1), (6, 7, 8)),
+            ((1, 1, 0), (6, 7, 8)),
+            ((0, 0, 0), (0, 3, 6)),
+            ((0, 1, 1), (0, 3, 6)),
+            ((1, 0, 1), (0, 3, 6)),
+            ((1, 1, 0), (0, 3, 6)),
+            ((0, 0, 0), (1, 4, 7)),
+            ((0, 1, 1), (1, 4, 7)),
+            ((1, 0, 1), (1, 4, 7)),
+            ((1, 1, 0), (1, 4, 7)),
+            ((0, 0, 0), (2, 5, 8)),
+            ((0, 1, 1), (2, 5, 8)),
+            ((1, 0, 1), (2, 5, 8)),
+            ((1, 1, 0), (2, 5, 8)),
             ## TO DO ##
                 ]
 sequences = sep_seq(num_m=num_obs,

@@ -78,8 +78,8 @@ def cycle_simp_SDP(num_obs,
     return prob.value, prob.status
 
 dim = 2
-num_obs = 3
-basis_size= 100# empirical
+num_obs = 5
+basis_size= 150# empirical
 
 val, status = cycle_dim_SDP(dim,
             num_obs,
