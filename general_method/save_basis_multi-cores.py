@@ -16,8 +16,9 @@ from basis_generator import generate_basis, rank_basis
 #     --out_max 1 \
 #     --batch_init 100 \
 #     --batch_size 20 \
-#     --dtype float16
-#     --save False
+#     --dtype float16 \
+#     --save_metadata True \
+#     --save_data False
 
 def main(args):
 
@@ -53,7 +54,7 @@ def main(args):
 
     stop = timeit.default_timer()
 
-    if args.save == True:
+    if args.save_metadata == True:
         meta_data = {}
         meta_data["dimension"] = args.dim
         meta_data["maximum length of sequences"] = args.len_seq
@@ -71,6 +72,7 @@ def main(args):
         with open(dir_name + NAME + '-meta_data.json', 'w') as fp:
             json.dump(meta_data, fp)
 
+    if args.save_data == True:
         np.save(dir_name + NAME, [X.astype(np.dtype(args.dtype), copy=False) for X in X_new_basis])
 
     print("The running time is {}".format(stop - start))
@@ -97,7 +99,9 @@ if __name__ == "__main__":
     parser.add_argument("--batch_init", type=int, default=100)
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--dtype", type=str, default="float16")
-    parser.add_argument("--save", type=str2bool, nargs='?',
+    parser.add_argument("--save_metadata", type=str2bool, nargs='?',
+                        const=True, default=True)
+    parser.add_argument("--save_data", type=str2bool, nargs='?',
                         const=True, default=False)
 
     args = parser.parse_args()
