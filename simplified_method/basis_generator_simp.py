@@ -29,9 +29,9 @@ def rand_moment(dim,
     X = np.ones((num_obs+1,num_obs+1))
     for seq in sequences:
         #Only working when the length of all sequences is 2.
-        X[seq[0], seq[1]] = np.trace(rho @ (A[seq[0]] @ A[seq[1]] + A[seq[1]] @ A[seq[0]]))/2
-        X[seq[1], seq[0]] = X[seq[0], seq[1]]
-    return np.real(X)
+        X[seq[0], seq[1]] = np.real(np.trace(rho @ (A[seq[0]] @ A[seq[1]] + A[seq[1]] @ A[seq[0]]))/2)
+        X[seq[1], seq[0]] = np.real(X[seq[0], seq[1]])
+    return X
 
 def rand_proj(dim):
     if dim==2:

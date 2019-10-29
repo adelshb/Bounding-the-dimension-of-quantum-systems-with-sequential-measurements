@@ -7,7 +7,7 @@ dim = 2
 num_obs = 5
 len_seq = 2
 out_max = 1
-basis_size= 121
+basis_size= 150
 KCBS_events = [((0, 1), (0, 1)),
             ((0, 1), (1, 2)),
             ((0, 1), (2, 3)),

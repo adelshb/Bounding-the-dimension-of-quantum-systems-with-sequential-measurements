@@ -1,5 +1,5 @@
 import numpy as np
-from basis_generator_2seq import generate_basis, all_seq
+from basis_generator_simp import generate_basis, all_seq
 
 # Return the rank for a given dimension and number of measurements
 
@@ -21,7 +21,7 @@ def rank(basis_size=20,
 
 basis_size=100
 n_max = 10
-dim_max = 5
+dim_max = 2
 
 rank(basis_size=basis_size,
     n_max = n_max,

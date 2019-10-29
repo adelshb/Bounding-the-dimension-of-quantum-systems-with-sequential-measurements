@@ -24,5 +24,5 @@ prob.solve()
 
 # Print result.
 print("The optimal value is", prob.value)
-print("A solution X is")
-print(X.value)
+#print("A solution X is")
+#print(X.value)
