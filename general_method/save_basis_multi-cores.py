@@ -22,7 +22,7 @@ from basis_generator import generate_basis, rank_basis
 def main(args):
 
     CPUs = multiprocessing.cpu_count()
-    input = [(args.dim, args.num_obs, args.len_seq, args.out_max, 1, "all_sequences", False)]
+    input = [(args.dim, args.num_obs, args.len_seq, args.out_max-1, 1, "all_sequences", False)]
     pool = multiprocessing.Pool(processes = CPUs)
 
     start = timeit.default_timer()
@@ -58,6 +58,7 @@ def main(args):
         meta_data["dimension"] = args.dim
         meta_data["maximum length of sequences"] = args.len_seq
         meta_data["num of observables"] = args.num_obs
+        meta_data["num of outcomes"] = args.out_max
         meta_data["time"] = stop - start
         meta_data["rank"] = int(rank_new)
         meta_data["number of elements"] = len(X_new_basis)
@@ -92,7 +93,7 @@ if __name__ == "__main__":
     parser.add_argument("--dim", type=int, default=2)
     parser.add_argument("--num_obs", type=int, default=3)
     parser.add_argument("--len_seq", type=int, default=2)
-    parser.add_argument("--out_max", type=int, default=1)
+    parser.add_argument("--out_max", type=int, default=2)
     parser.add_argument("--batch_init", type=int, default=100)
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--dtype", type=str, default="float16")
