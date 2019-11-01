@@ -3,7 +3,7 @@ import cvxpy as cp
 import numpy as np
 from basis_generator import generate_basis, sep_seq, all_seq
 
-dim = 3
+dim = 2
 num_obs = 3
 len_seq = 2
 out_max = 1

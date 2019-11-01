@@ -3,7 +3,7 @@ import cvxpy as cp
 import numpy as np
 from basis_generator import generate_basis, sep_seq, all_seq
 
-dim = 3
+dim = 2
 num_obs = 2
 len_seq = 3
 out_max = 1
@@ -22,7 +22,7 @@ GYN_events = [((0, 0, 0), (0, 0, 0)),
 sequences = all_seq(n=num_obs,
             r_max=len_seq,
             out_max=out_max)
-            
+
 #print(sequences)
 n = len(sequences)
 
