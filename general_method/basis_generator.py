@@ -13,6 +13,8 @@ def generate_basis(dim,
                 out_max = 1,
                 batch_size=100,
                 seq_method="all_sequences",
+                sel_sequences = [2],
+                remove_last_out = True,
                 compute_rank = True):
 
     if out_max + 1 > dim:
@@ -20,7 +22,7 @@ def generate_basis(dim,
         return
 
     scipy.random.seed()
-    X_basis = [rand_moment(dim, num_obs, len_seq, out_max, seq_method=seq_method) for __ in range(batch_size)]
+    X_basis = [rand_moment(dim, num_obs, len_seq, out_max, seq_method=seq_method, sel_sequences=sel_sequences, remove_last_out=remove_last_out) for __ in range(batch_size)]
     if compute_rank == True:
         rank = rank_basis(X_basis)
         return X_basis, rank
@@ -31,13 +33,19 @@ def rand_moment(dim=2,
              num_obs=3,
              len_seq=2,
              out_max=1,
-             seq_method="all_sequences"):
+             seq_method="all_sequences",
+             sel_sequences = [2],
+             remove_last_out= True):
 
     if seq_method == "all_sequences":
-        sequences = all_seq(num_obs, r_max=len_seq, out_max=out_max)
+        sequences = all_seq(num_obs, r_max=len_seq, out_max=out_max, remove_last_out=remove_last_out)
     elif seq_method == "sep_seq":
         sequences = sep_seq(num_m=num_obs, num_p=len_seq, out_max=out_max)
-        num_obs = num_obs * len_seq
+    elif seq_method == "sel_sequences":
+        sequences = []
+        for r in list(set(sel_sequences)):
+            sequences.append(sel_seq(num_obs, r, out_max=1, remove_last_out=True))
+        sequences = sum(sequences, [])
 
     rho = rand_rho(dim)
 
@@ -46,15 +54,26 @@ def rand_moment(dim=2,
         P_temp = rand_projs(dim, out_max)
         P.append(P_temp)
 
-    X = np.eye(len(sequences)+1)
-    for i, seq_row in enumerate(sequences):
-        Pi = proj_mul([P[k] for k in seq_row[1]], seq_row[0])
-        X[0,i+1] = np.trace(Pi @ np.eye(dim) @ rho)
-        X[i+1,0] = np.trace(np.eye(dim) @ np.conjugate(Pi.T) @ rho)
-        for j, seq_col in enumerate(sequences):
-            Pj= proj_mul([P[k] for k in seq_col[1]], seq_col[0])
-            X[i+1,j+1] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
-    return X
+    # Chi representation of the moment matrix
+    if remove_last_out:
+        X = np.eye(len(sequences)+1, dtype=complex)
+        for i, seq_row in enumerate(sequences):
+            Pi = proj_mul([P[k] for k in seq_row[1]], seq_row[0])
+            X[0,i+1] = np.trace(Pi @ np.eye(dim) @ rho)
+            X[i+1,0] = np.trace(np.eye(dim) @ np.conjugate(Pi.T) @ rho)
+            for j, seq_col in enumerate(sequences):
+                Pj= proj_mul([P[k] for k in seq_col[1]], seq_col[0])
+                X[i+1,j+1] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
+        return X
+    # M representation of the moment matrix
+    else:
+        X = np.eye(len(sequences), dtype=complex)
+        for i, seq_row in enumerate(sequences):
+            Pi = proj_mul([P[k] for k in seq_row[1]], seq_row[0])
+            for j, seq_col in enumerate(sequences):
+                Pj= proj_mul([P[k] for k in seq_col[1]], seq_col[0])
+                X[i,j] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
+        return X
 
 def rand_projs(dim, out_max):
     if dim == 1:
@@ -65,7 +84,9 @@ def rand_projs(dim, out_max):
         return [U @ D @ np.conjugate(U.T), U @ (np.eye(dim)-D) @ np.conjugate(U.T)]
     elif dim>2:
         projs = []
-        eigenvals = list(random_ints_with_sum(dim, out_max + 1))
+        eigenvals = [0]*(out_max + 1)
+        while 0 in eigenvals:
+            eigenvals = list(random_ints_with_sum(dim, out_max + 1))
         for j,val in enumerate(eigenvals):
             vec_temp = [0]*sum(eigenvals[:j]) + [1]*val + [0]*sum(eigenvals[j+1:])
             projs.append(vec_temp*np.eye(dim))
@@ -89,13 +110,34 @@ def rank_basis(X_basis):
     rank = np.linalg.matrix_rank(X)
     return rank
 
-def all_seq(n,r_max=2, out_max=1):
+def all_seq(n,r_max=2,
+            out_max=1,
+            remove_last_out=True):
+
+    if remove_last_out:
+        out_max += -1
     arr = [i for i in range(n)]
     seq = []
     for r in range(1,r_max+1):
         settings = list(product(arr, repeat=r))
         outcomes = list(product([i for i in range(out_max+1)], repeat=r))
         seq.append([(r,s) for r in outcomes for s in settings])
+    seq = sum(seq,[])
+    return seq
+
+def sel_seq(n,
+            r=2,
+            out_max=1,
+            remove_last_out=True):
+
+    if remove_last_out:
+        out_max += -1
+    arr = [i for i in range(n)]
+    seq = []
+
+    settings = list(product(arr, repeat=r))
+    outcomes = list(product([i for i in range(out_max+1)], repeat=r))
+    seq.append([(res,set) for res in outcomes for set in settings])
     seq = sum(seq,[])
     return seq
 

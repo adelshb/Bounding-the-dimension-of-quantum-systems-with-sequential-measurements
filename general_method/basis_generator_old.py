@@ -52,15 +52,16 @@ def rand_moment(dim=2,
     return X
 
 def rand_proj(dim):
+    if dim == 1:
+        return 1
+
     if dim==2:
         D = np.array([[1, 0],[0, 0]])
     else:
         D = np.random.randint(2, size=dim)*np.eye(dim)
-    if dim == 1:
-        return 1
-    else:
-        U = unitary_group.rvs(dim)
-        return U @ D @ np.conjugate(U.T)
+
+    U = unitary_group.rvs(dim)
+    return U @ D @ np.conjugate(U.T)
 
 def rand_rho(dim):
     psi = np.array([1] + [0]*(dim-1))
