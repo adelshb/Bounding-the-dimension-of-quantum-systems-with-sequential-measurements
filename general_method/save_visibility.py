@@ -9,12 +9,12 @@ from basis_generator import rand_moment, generate_basis, sel_seq, rank_basis
 
 def main(args):
 
-    print(args)
+    print("Parameters: ", args)
+    dir_name = "data/"
 
-    etas = []
-    ranks = []
     for k in range(1,args.level_max+1):
 
+        print("Level: ", k)
         etak, rankk = visibility(num_obs=args.num_obs,
                             len_seq=args.len_seq,
                             out_max=args.out_max,
@@ -24,27 +24,26 @@ def main(args):
                             dim_base= args.dim_base,
                             level=k,
                             batch_size= args.batch_size*k**2)
-        etas.append(etak)
-        ranks.append(int(rankk))
 
-    data = {}
-    data["num of observables"] = args.num_obs
-    data["maximum length of sequences"] = args.len_seq
-    data["num of outcomes"] = args.out_max
-    data["sequences method"] = args.seq_method
-    data["dimension behaviors"] = args.dimX
-    data["dimension base"] = args.dim_base
-    data["level max"] = args.level_max
-    data["visibilities"] = etas
-    data["base ranks"] = ranks
+        data = {}
+        data["num of observables"] = args.num_obs
+        data["maximum length of sequences"] = args.len_seq
+        data["num of outcomes"] = args.out_max +1 
+        data["sequences method"] = args.seq_method
+        data["dimension behaviors"] = args.dimX
+        data["dimension base"] = args.dim_base
+        data["level"] = k
+        data["visibilities"] = etak
+        data["base ranks"] = int(rankk)
 
-    dir_name = "data/"
-    NAME = '{}-num_obs-{}-len_seq-{}-out_max-{}-dim_behavior-{}-dim_base-{}-level_max'.format(args.num_obs, args.len_seq, args.out_max, args.dimX, args.dim_base, args.level_max)
 
-    with open(dir_name + NAME + '.json', 'w') as fp:
-        json.dump(data, fp, indent=2)
+        NAME = '{}-num_obs-{}-len_seq-{}-out_max-{}-dim_behavior-{}-dim_base-{}-level'.format(args.num_obs, args.len_seq, args.out_max, args.dimX, args.dim_base, k)
 
-    return etas
+        with open(dir_name + NAME + '.json', 'w') as fp:
+            json.dump(data, fp, indent=2)
+
+    print("Done.")
+    return
 
 def visibility(num_obs=3,
             len_seq=2,
