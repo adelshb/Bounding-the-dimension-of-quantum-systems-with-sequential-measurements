@@ -1,0 +1,11 @@
+{
+  "num of observables": 3,
+  "maximum length of sequences": 2,
+  "num of outcomes": 2,
+  "sequences method": "sel_sequences",
+  "dimension behaviors": 4,
+  "dimension base": 2,
+  "level": 2,
+  "visibilities": [],
+  "base ranks": 84
+}
