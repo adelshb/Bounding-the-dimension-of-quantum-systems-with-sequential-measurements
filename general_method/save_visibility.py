@@ -25,10 +25,13 @@ def main(args):
                             level=k,
                             batch_size= args.batch_size*k**2)
 
+        print(etak)
+        print(rankk)
+
         data = {}
         data["num of observables"] = args.num_obs
         data["maximum length of sequences"] = args.len_seq
-        data["num of outcomes"] = args.out_max +1 
+        data["num of outcomes"] = args.out_max +1
         data["sequences method"] = args.seq_method
         data["dimension behaviors"] = args.dimX
         data["dimension base"] = args.dim_base
@@ -36,6 +39,7 @@ def main(args):
         data["visibilities"] = etak
         data["base ranks"] = int(rankk)
 
+        print(data)
 
         NAME = '{}-num_obs-{}-len_seq-{}-out_max-{}-dim_behavior-{}-dim_base-{}-level'.format(args.num_obs, args.len_seq, args.out_max, args.dimX, args.dim_base, k)
 
