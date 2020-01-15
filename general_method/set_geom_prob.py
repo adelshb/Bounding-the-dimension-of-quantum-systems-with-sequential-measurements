@@ -4,7 +4,7 @@ import cvxpy as cp
 from argparse import ArgumentParser
 #import multiprocessing
 
-from basis_generator import rand_moment, generate_basis, sel_seq
+from general_method.basis_generator import rand_moment, generate_basis, sel_seq
 
 def visibility(num_obs=3,
             len_seq=2,
@@ -41,7 +41,7 @@ def visibility(num_obs=3,
     etas = []
     count = 0
     while count < data_samp:
-        X = rand_moment(dimX, num_obs, len_seq, out_max, seq_method, [len_seq] ,remove_last_out=remove_last_out)
+        X = rand_moment(dimX, num_obs, len_seq, out_max, seq_method, [len_seq] ,remove_last_out=True)
 
         eta = cp.Variable((1, 1))
         alpha = cp.Variable((len(X_basis), 1))
