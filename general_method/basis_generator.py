@@ -35,7 +35,7 @@ def rand_moment(dim=2,
              out_max=1,
              seq_method="all_sequences",
              sel_sequences = [2],
-             remove_last_out= True):
+             remove_last_out = True):
 
     if seq_method == "all_sequences":
         sequences = all_seq(num_obs, r_max=len_seq, out_max=out_max, remove_last_out=remove_last_out)
@@ -44,7 +44,7 @@ def rand_moment(dim=2,
     elif seq_method == "sel_sequences":
         sequences = []
         for r in list(set(sel_sequences)):
-            sequences.append(sel_seq(num_obs, r, out_max=1, remove_last_out=True))
+            sequences.append(sel_seq(num_obs, r, out_max=1, remove_last_out=remove_last_out))
         sequences = sum(sequences, [])
 
     rho = rand_rho(dim)
