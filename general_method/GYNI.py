@@ -19,11 +19,11 @@ GYN_events = [((0, 0, 0), (0, 0, 0)),
 sequences = sel_seq(n = num_obs,
                 r = len_seq,
                 out_max = out_max,
-                remove_last_out = False)
+                remove_last_out = True)
 
 n = len(sequences)
 
-X_basis, rank = generate_basis(dim, num_obs, len_seq, out_max, basis_size, seq_method=seq_method, sel_sequences = [len_seq], remove_last_out = False)
+X_basis, rank = generate_basis(dim, num_obs, len_seq, out_max, basis_size, seq_method=seq_method, sel_sequences = [len_seq], remove_last_out = True)
 print("Basis rank: ", rank)
 
 alpha = cp.Variable((len(X_basis), 1))
