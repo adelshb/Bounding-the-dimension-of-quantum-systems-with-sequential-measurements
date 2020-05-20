@@ -110,7 +110,6 @@ def single_behavior_visibility(dimX, num_obs, len_seq, out_max, seq_method, X_ba
     constraints += [sum([alpha[j]*X_basis[j] for j in range(len(X_basis))])[0,0] == 1]
     for i in range(1,len(X)):
         constraints += [
-            #eta*X[i,i] + (1-eta)*X_basis_2d[0][i,i] == sum([alpha[j]*X_basis_2d[j][i,i] for j in range(len(X_basis_2d))])
             eta*X[i,i] + (1-eta)/2 == sum([alpha[j]*X_basis[j][i,i] for j in range(len(X_basis))])
         ]
 
