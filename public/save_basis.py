@@ -9,7 +9,7 @@ import timeit
 from basis_generator import generate_basis, rank_basis
 
 # Example:
-# python save_basis_multi-cores.py \
+# python save_basis.py \
 #     --dim 2 \
 #     --num_obs 3 \
 #     --len_seq 2 \
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     parser.add_argument("--len_seq", type=int, default=2)
     parser.add_argument("--out_max", type=int, default=1)
     parser.add_argument("--seq_method", type=str, default="sel_seq")
-    parser.add_argument("--level", type=str, default=1)
+    parser.add_argument("--level", type=int, default=1)
     parser.add_argument("--remove_last_out", type=str2bool, nargs='?',
                         const=True, default=True)
 
