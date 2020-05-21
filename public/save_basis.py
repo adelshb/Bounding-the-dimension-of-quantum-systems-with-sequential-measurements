@@ -6,7 +6,7 @@ import multiprocessing
 import json
 import timeit
 
-from basis_generator import generate_basis, rank_basis
+from basis_generator import generate_basis, rank_basis, rand_moment
 
 # Example:
 # python save_basis.py \
@@ -34,10 +34,13 @@ def main(args):
     while Done==False:
 
         if init == True:
-            X = pool.starmap(generate_basis, input*args.batch_init)
+            #X = pool.starmap(generate_basis, input*args.batch_init)
+            X = pool.starmap(rand_moment, input*args.batch_init)
+            print(len(X))
         else:
-            X = pool.starmap(generate_basis, input*args.batch_size)
-        X = sum(X,[])
+            #X = pool.starmap(generate_basis, input*args.batch_size)
+            X = pool.starmap(rand_moment, input*args.batch_init)
+        #X = sum(X,[])
 
         X_basis = X_basis + X
         rank = rank_basis(X_basis)
@@ -97,7 +100,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_obs", type=int, default=3)
     parser.add_argument("--len_seq", type=int, default=2)
     parser.add_argument("--out_max", type=int, default=1)
-    parser.add_argument("--seq_method", type=str, default="sel_seq")
+    parser.add_argument("--seq_method", type=str, default="sel_sequences")
     parser.add_argument("--level", type=int, default=1)
     parser.add_argument("--remove_last_out", type=str2bool, nargs='?',
                         const=True, default=True)
@@ -110,7 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("--save_metadata", type=str2bool, nargs='?',
                         const=True, default=True)
     parser.add_argument("--save_data", type=str2bool, nargs='?',
-                        const=True, default=False)
+                        const=True, default=True)
     parser.add_argument("--compute_rank", type=str2bool, nargs='?',
                         const=True, default=True)
 
