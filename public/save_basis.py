@@ -106,7 +106,7 @@ if __name__ == "__main__":
                         const=True, default=True)
 
 
-    parser.add_argument("--batch_init", type=int, default=100)
+    parser.add_argument("--batch_init", type=int, default=2000)
     parser.add_argument("--batch_size", type=int, default=20)
 
     parser.add_argument("--dtype", type=str, default="float16")
