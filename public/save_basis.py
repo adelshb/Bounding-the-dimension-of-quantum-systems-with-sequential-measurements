@@ -78,7 +78,7 @@ def main(args):
 
     if args.save_data == True:
         if args.dtype == "None":
-            np.save(dir_name + NAME, [X, copy=False) for X in X_new_basis])
+            np.save(dir_name + NAME, [X for X in X_new_basis])
         else:
             np.save(dir_name + NAME, [X.astype(np.dtype(args.dtype), copy=False) for X in X_new_basis])
 
