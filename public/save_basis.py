@@ -77,7 +77,10 @@ def main(args):
             json.dump(meta_data, fp)
 
     if args.save_data == True:
-        np.save(dir_name + NAME, [X.astype(np.dtype(args.dtype), copy=False) for X in X_new_basis])
+        if args.dtype = "None":
+            np.save(dir_name + NAME, [X, copy=False) for X in X_new_basis])
+        else:
+            np.save(dir_name + NAME, [X.astype(np.dtype(args.dtype), copy=False) for X in X_new_basis])
 
     print("The running time is {}".format(stop - start))
     print("The rank is {}".format(rank_new))
@@ -109,7 +112,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_init", type=int, default=2000)
     parser.add_argument("--batch_size", type=int, default=20)
 
-    parser.add_argument("--dtype", type=str, default="float16")
+    parser.add_argument("--dtype", type=str, default="None")
     parser.add_argument("--save_metadata", type=str2bool, nargs='?',
                         const=True, default=True)
     parser.add_argument("--save_data", type=str2bool, nargs='?',
