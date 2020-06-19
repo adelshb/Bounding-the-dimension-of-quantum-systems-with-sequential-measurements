@@ -77,7 +77,7 @@ def main(args):
             json.dump(meta_data, fp)
 
     if args.save_data == True:
-        if args.dtype = "None":
+        if args.dtype == "None":
             np.save(dir_name + NAME, [X, copy=False) for X in X_new_basis])
         else:
             np.save(dir_name + NAME, [X.astype(np.dtype(args.dtype), copy=False) for X in X_new_basis])
