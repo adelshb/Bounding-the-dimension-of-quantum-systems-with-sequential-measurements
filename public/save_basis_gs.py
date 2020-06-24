@@ -1,8 +1,7 @@
 import numpy as np
+from numpy import linalg as LA
 
 from argparse import ArgumentParser
-import multiprocessing
-
 import json
 import timeit
 
