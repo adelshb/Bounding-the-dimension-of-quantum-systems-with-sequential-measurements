@@ -108,7 +108,7 @@ if __name__ == "__main__":
     parser.add_argument("--level", type=int, default=1)
     parser.add_argument("--remove_last_out", type=str2bool, nargs='?',
                         const=True, default=True)
-    parser.add_argument("--norm_prec", type=double, default=0.0000001)
+    parser.add_argument("--norm_prec", type=float, default=0.0000001)
     parser.add_argument("--stop", type=int, default=10000)
 
     parser.add_argument("--save_metadata", type=str2bool, nargs='?',
