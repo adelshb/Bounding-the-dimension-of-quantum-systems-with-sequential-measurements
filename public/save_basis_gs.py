@@ -70,8 +70,8 @@ def main(args):
         meta_data["num of observables"] = args.num_obs
         meta_data["num of outcomes"] = args.num_out
         meta_data["time"] = stop - start
-        meta_data["number of LI moment matrices"] = len(X_new_basis)
-        meta_data["moment matrix size"] = X_new_basis[0].shape
+        meta_data["number of LI moment matrices"] = len(X_basis)
+        meta_data["moment matrix size"] = X_basis[0].shape
         meta_data["level"] = args.level
         meta_data["norm precision"] = args.norm_prec
 
@@ -82,7 +82,7 @@ def main(args):
             json.dump(meta_data, fp)
 
     if args.save_data == True:
-        np.save(dir_name + NAME, [X for X in X_new_basis])
+        np.save(dir_name + NAME, [X for X in X_basis])
 
     print("The running time is {}".format(stop - start))
     print("Done!")
