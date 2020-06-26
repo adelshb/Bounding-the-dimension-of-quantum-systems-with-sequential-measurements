@@ -11,15 +11,15 @@ import timeit
 from basis_generator_v2 import rand_moment
 
 # Example:
-# python save_basis_gr.py \
+# python save_visibility_gr.py \
 #     --num_obs 3 \
 #     --len_seq 2 \
 #     --num_out 2 \
 #     --dimX 3 \
-#     --data_samp 100 \
+#     --data_samp 10 \
 #     --dim_base 2 \
 #     --level 1 \
-#     --basis_filename /data_basis/2-dim-2-num_obs-3-len_seq-2-num_out-meta_data.json \
+#     --basis_filename data_basis/2-dim-3-num_obs-2-len_seq-2-num_out.npy
 
 def main(args):
 
