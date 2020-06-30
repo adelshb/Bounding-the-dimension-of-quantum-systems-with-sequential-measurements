@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 import json
 import timeit
 
-from basis_generator_nseq import generate_basis, rank_basis
+from basis_generator import generate_basis, rank_basis
 
 # Example:
 # python save_basis.py \

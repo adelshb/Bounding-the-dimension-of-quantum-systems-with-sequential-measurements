@@ -11,6 +11,7 @@ def rand_moment(dim=2,
              num_obs=3,
              len_seq=2,
              num_out=2,
+             seq_method="all_sequences",
              sel_sequences = [2],
              remove_last_out = True):
 
@@ -27,7 +28,7 @@ def rand_moment(dim=2,
         for i, seq_row in enumerate(sequences):
             Pi = proj_mul([P[k] for k in seq_row[1]], seq_row[0])
             X[0,i+1] = np.trace(Pi @ np.eye(dim) @ rho)
-            X[i+1,0] = np.trace(np.eye(dim) @ np.conjugate(Pi.T) @ rho)
+            X[i+1,0] = np.conjugate(X[0,i+1])#np.trace(np.eye(dim) @ np.conjugate(Pi.T) @ rho)
             for j, seq_col in enumerate(sequences):
                 Pj= proj_mul([P[k] for k in seq_col[1]], seq_col[0])
                 X[i+1,j+1] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
@@ -52,7 +53,7 @@ def rand_projs(dim, num_out):
         projs = []
         eigenvals = [0]*(num_out + 1)
         while 0 in eigenvals:
-            eigenvals = list(random_ints_with_sum(dim, num_out + 1))
+            eigenvals = list(random_ints_with_sum(dim, num_out))
         for j,val in enumerate(eigenvals):
             vec_temp = [0]*sum(eigenvals[:j]) + [1]*val + [0]*sum(eigenvals[j+1:])
             projs.append(vec_temp*np.eye(dim))
