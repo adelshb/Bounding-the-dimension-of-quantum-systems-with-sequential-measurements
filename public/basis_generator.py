@@ -7,6 +7,43 @@ from scipy.stats import unitary_group
 import warnings
 warnings.filterwarnings('ignore')
 
+def basis_gs(dim, num_obs, len_seq, num_out, prec, stop):
+
+    X_basis = []
+    X = rand_moment(dim,
+                    num_obs,
+                    len_seq,
+                    num_out,
+                    [len_seq],
+                    True)
+
+    X = X/LA.norm(X)
+    X_basis.append(X)
+
+    while True:
+
+        X = rand_moment(dim,
+                    num_obs,
+                    len_seq,
+                    num_out,
+                    [len_seq],
+                    True)
+
+        for k in range(len(X_basis)):
+            X -= X_basis[k]*np.sum(X_basis[k]*np.conjugate(X))
+
+        if LA.norm(X) < prec:
+            print("Nul matrix found")
+            print("Number of LI moment matrices: ", len(X_basis))
+            return X_basis
+        else:
+            X = X/LA.norm(X)
+            X_basis.append(X)
+
+        if count > args.stop:
+            print("Cannot find the basis")
+            return
+
 def rand_moment(dim=2,
              num_obs=3,
              len_seq=2,

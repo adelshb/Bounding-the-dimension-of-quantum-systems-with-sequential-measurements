@@ -5,7 +5,7 @@ from argparse import ArgumentParser
 import json
 import timeit
 
-from basis_generator import rand_moment
+from basis_generator import basis_gs
 
 # Example:
 # python save_basis.py \
@@ -22,44 +22,51 @@ def main(args):
 
     start = timeit.default_timer()
 
-    # Initialization
-    flag = False
-    count = 1
-    X_basis = []
+    # # Initialization
+    # flag = False
+    # count = 1
+    # X_basis = []
+    #
+    # X = rand_moment(args.dim,
+    #                 args.num_obs,
+    #                 args.len_seq,
+    #                 args.num_out,
+    #                 [args.len_seq + args.level -1],
+    #                 args.remove_last_out)
+    #
+    # X = X/LA.norm(X)
+    # X_basis.append(X)
+    #
+    # while flag==False:
+    #
+    #     X = rand_moment(args.dim,
+    #                     args.num_obs,
+    #                     args.len_seq,
+    #                     args.num_out,
+    #                     [args.len_seq + args.level -1],
+    #                     args.remove_last_out)
+    #
+    #     for k in range(len(X_basis)):
+    #         X -= X_basis[k]*np.sum(X_basis[k]*np.conjugate(X))
+    #
+    #     if LA.norm(X) < args.norm_prec:
+    #         print("Nul matrix found")
+    #         print("Number of LI moment matrices: ", len(X_basis))
+    #         flag=True
+    #     else:
+    #         X = X/LA.norm(X)
+    #         X_basis.append(X)
+    #         count+=1
+    #
+    #     if count > args.stop:
+    #         print("Cannot find the basis")
 
-    X = rand_moment(args.dim,
-                    args.num_obs,
-                    args.len_seq,
-                    args.num_out,
-                    [args.len_seq + args.level -1],
-                    args.remove_last_out)
-
-    X = X/LA.norm(X)
-    X_basis.append(X)
-
-    while flag==False:
-
-        X = rand_moment(args.dim,
+    X_basis = basis_gs(args.dim,
                         args.num_obs,
                         args.len_seq,
                         args.num_out,
-                        [args.len_seq + args.level -1],
-                        args.remove_last_out)
-
-        for k in range(len(X_basis)):
-            X -= X_basis[k]*np.sum(X_basis[k]*np.conjugate(X))
-
-        if LA.norm(X) < args.norm_prec:
-            print("Nul matrix found")
-            print("Number of LI moment matrices: ", len(X_basis))
-            flag=True
-        else:
-            X = X/LA.norm(X)
-            X_basis.append(X)
-            count+=1
-
-        if count > args.stop:
-            print("Cannot find the basis")
+                        args.prec,
+                        args.stop)
 
     stop = timeit.default_timer()
 
