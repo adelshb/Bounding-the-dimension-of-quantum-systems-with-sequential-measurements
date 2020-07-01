@@ -1,60 +1,65 @@
 import numpy as np
+from numpy import linalg as LA
 
 from argparse import ArgumentParser
-import multiprocessing
-
 import json
 import timeit
 
-from basis_generator import generate_basis, rank_basis, rand_moment
+from basis_generator import rand_moment
 
 # Example:
 # python save_basis.py \
 #     --dim 2 \
-#     --num_obs 3 \
+#     --num_obs 2 \
 #     --len_seq 2 \
-#     --out_max 1 \
-#     --batch_init 100 \
-#     --batch_size 20 \
-#     --dtype float16 \
+#     --num_out 2 \
+#     --norm_prec 0.0000001 \
+#     --stop 10000 \
 #     --save_metadata True \
-#     --save_data False
+#     --save_data True
 
 def main(args):
 
-    CPUs = multiprocessing.cpu_count()
-    #input = [(args.dim, args.num_obs, args.len_seq, args.out_max-1, 1, "all_sequences", False)]
-    input = [(args.dim, args.num_obs, args.len_seq, args.out_max, args.seq_method, [args.len_seq + args.level -1], args.remove_last_out)]
-    pool = multiprocessing.Pool(processes = CPUs)
-
     start = timeit.default_timer()
+
+    # Initialization
+    flag = False
+    count = 1
     X_basis = []
-    Done = False
-    init = True
-    while Done==False:
 
-        if init == True:
-            #X = pool.starmap(generate_basis, input*args.batch_init)
-            X = pool.starmap(rand_moment, input*args.batch_init)
-            print(len(X))
+    X = rand_moment(args.dim,
+                    args.num_obs,
+                    args.len_seq,
+                    args.num_out,
+                    [args.len_seq + args.level -1],
+                    args.remove_last_out)
+
+    X = X/LA.norm(X)
+    X_basis.append(X)
+
+    while flag==False:
+
+        X = rand_moment(args.dim,
+                        args.num_obs,
+                        args.len_seq,
+                        args.num_out,
+                        [args.len_seq + args.level -1],
+                        args.remove_last_out)
+
+        for k in range(len(X_basis)):
+            X -= X_basis[k]*np.sum(X_basis[k]*np.conjugate(X))
+
+        if LA.norm(X) < args.norm_prec:
+            print("Nul matrix found")
+            print("Number of LI moment matrices: ", len(X_basis))
+            flag=True
         else:
-            #X = pool.starmap(generate_basis, input*args.batch_size)
-            X = pool.starmap(rand_moment, input*args.batch_init)
-        #X = sum(X,[])
+            X = X/LA.norm(X)
+            X_basis.append(X)
+            count+=1
 
-        X_basis = X_basis + X
-        rank = rank_basis(X_basis)
-        if rank < len(X_basis):
-            Done = True
-
-    Done = False
-    extra = 0
-    while Done==False:
-        X_new_basis = X_basis[:rank+extra]
-        rank_new = rank_basis(X_new_basis)
-        if rank_new == rank:
-            Done = True
-        extra += 1
+        if count > args.stop:
+            print("Cannot find the basis")
 
     stop = timeit.default_timer()
 
@@ -63,27 +68,23 @@ def main(args):
         meta_data["dimension"] = args.dim
         meta_data["maximum length of sequences"] = args.len_seq
         meta_data["num of observables"] = args.num_obs
-        meta_data["num of outcomes"] = args.out_max
+        meta_data["num of outcomes"] = args.num_out
         meta_data["time"] = stop - start
-        meta_data["rank"] = int(rank_new)
-        meta_data["number of elements"] = len(X_new_basis)
-        meta_data["moment size"] = X_new_basis[0].shape
-        meta_data["dtype"] = args.dtype
+        meta_data["number of LI moment matrices"] = len(X_basis)
+        meta_data["moment matrix size"] = X_basis[0].shape
+        meta_data["level"] = args.level
+        meta_data["norm precision"] = args.norm_prec
 
         dir_name = "data_basis/"
-        NAME = '{}-dim-{}-num_obs-{}-len_seq-{}-out_max'.format(args.dim, args.num_obs, args.len_seq, args.out_max)
+        NAME = '{}-dim-{}-num_obs-{}-len_seq-{}-num_out'.format(args.dim, args.num_obs, args.len_seq, args.num_out)
 
         with open(dir_name + NAME + '-meta_data.json', 'w') as fp:
             json.dump(meta_data, fp)
 
     if args.save_data == True:
-        if args.dtype == "None":
-            np.save(dir_name + NAME, [X for X in X_new_basis])
-        else:
-            np.save(dir_name + NAME, [X.astype(np.dtype(args.dtype), copy=False) for X in X_new_basis])
+        np.save(dir_name + NAME, [X for X in X_basis])
 
     print("The running time is {}".format(stop - start))
-    print("The rank is {}".format(rank_new))
     print("Done!")
 
 def str2bool(v):
@@ -102,22 +103,16 @@ if __name__ == "__main__":
     parser.add_argument("--dim", type=int, default=2)
     parser.add_argument("--num_obs", type=int, default=3)
     parser.add_argument("--len_seq", type=int, default=2)
-    parser.add_argument("--out_max", type=int, default=1)
-    parser.add_argument("--seq_method", type=str, default="sel_sequences")
+    parser.add_argument("--num_out", type=int, default=2)
     parser.add_argument("--level", type=int, default=1)
     parser.add_argument("--remove_last_out", type=str2bool, nargs='?',
                         const=True, default=True)
+    parser.add_argument("--norm_prec", type=float, default=0.0000001)
+    parser.add_argument("--stop", type=int, default=10000)
 
-
-    parser.add_argument("--batch_init", type=int, default=2000)
-    parser.add_argument("--batch_size", type=int, default=20)
-
-    parser.add_argument("--dtype", type=str, default="None")
     parser.add_argument("--save_metadata", type=str2bool, nargs='?',
                         const=True, default=True)
     parser.add_argument("--save_data", type=str2bool, nargs='?',
-                        const=True, default=True)
-    parser.add_argument("--compute_rank", type=str2bool, nargs='?',
                         const=True, default=True)
 
     args = parser.parse_args()

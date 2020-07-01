@@ -1,139 +1,120 @@
 import numpy as np
+from numpy import linalg as LA
 import cvxpy as cp
+import scipy
 
 from argparse import ArgumentParser
 import multiprocessing
 import json
+import timeit
 
-from basis_generator import rand_moment, generate_basis, sel_seq, rank_basis
+from basis_generator import rand_moment
+
+# Example:
+# python save_visibility.py \
+#     --num_obs 3 \
+#     --len_seq 2 \
+#     --num_out 2 \
+#     --dimX 3 \
+#     --data_samp 10 \
+#     --dim_base 2 \
+#     --level 1 \
+#     --basis_filename data_basis/2-dim-3-num_obs-2-len_seq-2-num_out.npy
 
 def main(args):
 
-    print("Parameters: ", args)
-    dir_name = "data/"
+    start = timeit.default_timer()
 
-    for k in range(1,args.level_max+1):
+    print("Parameters: {}.".format(args))
 
-        print("Level: ", k)
-        etak, rankk = visibility(num_obs=args.num_obs,
-                            len_seq=args.len_seq,
-                            out_max=args.out_max,
-                            seq_method= args.seq_method,
-                            dimX= args.dimX,
-                            data_samp = args.data_samp,
-                            dim_base= args.dim_base,
-                            level=k,
-                            batch_size= args.batch_size*k**2)
-
-        data = {}
-        data["num of observables"] = args.num_obs
-        data["maximum length of sequences"] = args.len_seq
-        data["num of outcomes"] = args.out_max +1
-        data["sequences method"] = args.seq_method
-        data["dimension behaviors"] = args.dimX
-        data["dimension base"] = args.dim_base
-        data["level"] = k
-        data["visibilities"] = etak
-        data["base ranks"] = int(rankk)
-
-        NAME = '{}-num_obs-{}-len_seq-{}-out_max-{}-dim_behavior-{}-dim_base-{}-level'.format(args.num_obs, args.len_seq, args.out_max, args.dimX, args.dim_base, k)
-
-        with open(dir_name + NAME + '.json', 'w') as fp:
-            json.dump(data, fp, indent=2)
-
-    print("Done.")
-    return
-
-def visibility(num_obs=3,
-            len_seq=2,
-            out_max=1,
-            seq_method= "sel_sequences",
-            dimX=3,
-            data_samp = 10,
-            dim_base=2,
-            level=1,
-            batch_size=50):
-
-    sequences = sel_seq(n = num_obs,
-                    r = len_seq,
-                    out_max = out_max,
-                    remove_last_out = True)
-
-    if level > 1:
-        hierarchy_seq = sequences + sel_seq(n = num_obs,
-                                        r = len_seq + level -1,
-                                        out_max = out_max,
-                                        remove_last_out = True)
-    else:
-        hierarchy_seq = sequences
+    X_basis = np.load(args.basis_filename)
+    # Etas = []
+    # for __ in range(args.data_samp):
+    #     X = rand_moment(args.dimX,
+    #                  args.num_obs,
+    #                  args.len_seq,
+    #                  args.num_out,
+    #                  sel_sequences = [args.len_seq, args.len_seq+args.level-1],
+    #                  remove_last_out = True)
+    #
+    #     Etas.append(single_behavior_visibility(X, X_basis))
 
     CPUs = multiprocessing.cpu_count()
-    input = [(dim_base, num_obs, len_seq, out_max, 1, 'sel_sequences', [len_seq, len_seq + level - 1], True, False)]
+    print("Number of CPUs: {}.".format(CPUs))
+    input = [(args.dimX, args.num_obs, args.len_seq, args.num_out, args.level, X_basis)]
     pool = multiprocessing.Pool(processes = CPUs)
+    Etas = pool.starmap(rand_moment2rand_vis, input*args.data_samp)
 
-    X_basis = []
-    Done = False
-    while Done==False:
+    data = {}
+    data["num of observables"] = args.num_obs
+    data["maximum length of sequences"] = args.len_seq
+    data["num of outcomes"] = args.num_out
+    data["dimension behaviors"] = args.dimX
+    data["dimension base"] = args.dim_base
+    data["level"] = args.level
+    data["visibilities"] = Etas
 
-        X = pool.starmap(generate_basis, input*batch_size)
-        X = sum(X,[])
+    NAME = '{}-num_obs-{}-len_seq-{}-out_max-{}-dim_behavior-{}-dim_base-{}-level'.format(args.num_obs, args.len_seq, args.num_out, args.dimX, args.dim_base, args.level)
 
-        X_basis = X_basis + X
-        rank = rank_basis(X_basis)
-        if rank < len(X_basis):
-            Done = True
+    with open("data_robustness/" + NAME + '.json', 'w') as fp:
+        json.dump(data, fp, indent=2)
 
-    Done = False
-    extra = 0
-    while Done==False:
-        X_new_basis = X_basis[:rank+extra]
-        rank_new = rank_basis(X_new_basis)
-        if rank_new == rank:
-            Done = True
-        extra += 1
+    print("Number of moment matrices generated and tested: {}.".format(len(Etas)))
+    stop = timeit.default_timer()
+    print("Running time: {}.".format(stop - start))
+    print("Done!")
+    return
 
-    input = [(dimX, num_obs, len_seq, out_max, 'sel_sequences', X_basis)]
+def rand_moment2rand_vis(dimX, num_obs, len_seq, num_out, level, X_basis):
 
-    etas = pool.starmap(single_behavior_visibility, input*data_samp)
-    etas = list(filter(None, etas))
+    scipy.random.seed()
+    X = rand_moment(dimX,
+                 num_obs,
+                 len_seq,
+                 num_out,
+                 sel_sequences = [len_seq, len_seq+level-1],
+                 remove_last_out = True)
 
-    return etas, rank
+    return single_behavior_visibility(X, X_basis)
 
-def single_behavior_visibility(dimX, num_obs, len_seq, out_max, seq_method, X_basis):
-
-    X = rand_moment(dimX, num_obs, len_seq, out_max, seq_method, [len_seq], remove_last_out=True)
+def single_behavior_visibility(X, X_basis):
 
     eta = cp.Variable((1, 1))
     alpha = cp.Variable((len(X_basis), 1))
+    beta = cp.Variable((len(X_basis), 1))
+    M = cp.Variable(X_basis[0].shape)
+    N = cp.Variable(X_basis[0].shape)
 
-    constraints = [sum([alpha[j]*X_basis[j] for j in range(len(X_basis))]) >> 0]
-    constraints += [sum([alpha[j]*X_basis[j] for j in range(len(X_basis))])[0,0] == 1]
+    constraints = [N >> 0]
+    constraints += [N == sum([beta[j]*X_basis[j] for j in range(len(X_basis))])]
+    constraints += [N[0,0] == 1 - eta]
+
     for i in range(1,len(X)):
         constraints += [
-            eta*X[i,i] + (1-eta)/2 == sum([alpha[j]*X_basis[j][i,i] for j in range(len(X_basis))])
+            eta*X[i,i] + N[i,i] == M[i,i]
         ]
+
+    constraints += [M >> 0]
+    constraints += [M == sum([alpha[j]*X_basis[j] for j in range(len(X_basis))])]
+    constraints += [M[0,0] == 1]
 
     prob = cp.Problem(cp.Maximize(eta),
                       constraints)
-    try:
-        prob.solve(solver=cp.MOSEK, verbose=False)
-        return eta.value[0][0]
-    except:
-        return None
 
+    prob.solve(solver=cp.MOSEK, verbose=False)
+    return eta.value[0][0]
 
 if __name__ == "__main__":
     parser = ArgumentParser()
 
     parser.add_argument("--num_obs", type=int, default=3)
     parser.add_argument("--len_seq", type=int, default=2)
-    parser.add_argument("--out_max", type=int, default=1)
-    parser.add_argument("--seq_method", type=str, default="sel_sequences")
+    parser.add_argument("--num_out", type=int, default=2)
     parser.add_argument("--dimX", type=int, default=3)
-    parser.add_argument("--data_samp", type=int, default=50)
+    parser.add_argument("--data_samp", type=int, default=100)
     parser.add_argument("--dim_base", type=int, default=2)
-    parser.add_argument("--level_max", type=int, default=1)
-    parser.add_argument("--batch_size", type=int, default=50)
+    parser.add_argument("--level", type=int, default=1)
+    parser.add_argument("--basis_filename", type=str, default="data_basis/2-dim-3-num_obs-2-len_seq-2-num_out.npy")
 
     args = parser.parse_args()
     main(args)
