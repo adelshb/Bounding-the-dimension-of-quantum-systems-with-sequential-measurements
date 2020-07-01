@@ -7,7 +7,12 @@ from scipy.stats import unitary_group
 import warnings
 warnings.filterwarnings('ignore')
 
-def basis_gs(dim, num_obs, len_seq, num_out, prec, stop):
+def basis_gs(dim = 2,
+            num_obs = 3,
+            len_seq = 2,
+            num_out = 2,
+            prec = 1e-15,
+            stop = 100000):
 
     X_basis = []
     X = rand_moment(dim,
