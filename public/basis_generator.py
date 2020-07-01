@@ -11,7 +11,6 @@ def rand_moment(dim=2,
              num_obs=3,
              len_seq=2,
              num_out=2,
-             seq_method="all_sequences",
              sel_sequences = [2],
              remove_last_out = True):
 
