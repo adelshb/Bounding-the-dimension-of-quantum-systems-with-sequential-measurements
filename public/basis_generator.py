@@ -47,7 +47,7 @@ def basis_gs(dim = 2,
             X = X/LA.norm(X)
             X_basis.append(X)
 
-        if count > args.stop:
+        if count > stop:
             print("Cannot find the basis")
             return
 
