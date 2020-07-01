@@ -15,6 +15,7 @@ def basis_gs(dim = 2,
             prec = 1e-15,
             stop = 100000):
 
+    count = 1
     X_basis = []
     X = rand_moment(dim,
                     num_obs,
