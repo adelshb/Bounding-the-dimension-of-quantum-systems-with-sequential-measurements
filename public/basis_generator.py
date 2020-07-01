@@ -1,5 +1,6 @@
 import numpy as np
 from itertools import combinations, product
+from numpy import linalg as LA
 import scipy
 import random
 from scipy.stats import unitary_group
