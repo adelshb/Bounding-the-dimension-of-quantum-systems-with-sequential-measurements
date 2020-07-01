@@ -12,6 +12,7 @@ def basis_gs(dim = 2,
             num_obs = 3,
             len_seq = 2,
             num_out = 2,
+            remove_last_out = True,
             prec = 1e-15,
             stop = 100000):
 
@@ -22,7 +23,7 @@ def basis_gs(dim = 2,
                     len_seq,
                     num_out,
                     [len_seq],
-                    True)
+                    remove_last_out)
 
     X = X/LA.norm(X)
     X_basis.append(X)
@@ -34,7 +35,7 @@ def basis_gs(dim = 2,
                     len_seq,
                     num_out,
                     [len_seq],
-                    True)
+                    remove_last_out)
 
         for k in range(len(X_basis)):
             X -= X_basis[k]*np.sum(X_basis[k]*np.conjugate(X))

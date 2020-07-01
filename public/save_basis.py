@@ -1,5 +1,4 @@
 import numpy as np
-from numpy import linalg as LA
 
 from argparse import ArgumentParser
 import json
@@ -65,6 +64,7 @@ def main(args):
                         args.num_obs,
                         args.len_seq,
                         args.num_out,
+                        args.remove_last_out,
                         args.prec,
                         args.stop)
 
