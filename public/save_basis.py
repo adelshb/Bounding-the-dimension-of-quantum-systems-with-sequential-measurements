@@ -41,7 +41,7 @@ def main(args):
         meta_data["number of LI moment matrices"] = len(X_basis)
         meta_data["moment matrix size"] = X_basis[0].shape
         meta_data["level"] = args.level
-        meta_data["norm precision"] = args.norm_prec
+        #meta_data["norm precision"] = args.norm_prec
 
         dir_name = "data_basis/"
         NAME = '{}-dim-{}-num_obs-{}-len_seq-{}-num_out'.format(args.dim, args.num_obs, args.len_seq, args.num_out)
