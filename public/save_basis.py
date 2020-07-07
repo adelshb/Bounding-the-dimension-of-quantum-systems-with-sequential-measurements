@@ -21,51 +21,12 @@ def main(args):
 
     start = timeit.default_timer()
 
-    # # Initialization
-    # flag = False
-    # count = 1
-    # X_basis = []
-    #
-    # X = rand_moment(args.dim,
-    #                 args.num_obs,
-    #                 args.len_seq,
-    #                 args.num_out,
-    #                 [args.len_seq + args.level -1],
-    #                 args.remove_last_out)
-    #
-    # X = X/LA.norm(X)
-    # X_basis.append(X)
-    #
-    # while flag==False:
-    #
-    #     X = rand_moment(args.dim,
-    #                     args.num_obs,
-    #                     args.len_seq,
-    #                     args.num_out,
-    #                     [args.len_seq + args.level -1],
-    #                     args.remove_last_out)
-    #
-    #     for k in range(len(X_basis)):
-    #         X -= X_basis[k]*np.sum(X_basis[k]*np.conjugate(X))
-    #
-    #     if LA.norm(X) < args.norm_prec:
-    #         print("Nul matrix found")
-    #         print("Number of LI moment matrices: ", len(X_basis))
-    #         flag=True
-    #     else:
-    #         X = X/LA.norm(X)
-    #         X_basis.append(X)
-    #         count+=1
-    #
-    #     if count > args.stop:
-    #         print("Cannot find the basis")
-
     X_basis = basis_gs(args.dim,
                         args.num_obs,
                         args.len_seq,
                         args.num_out,
                         args.remove_last_out,
-                        args.prec,
+                        #args.prec,
                         args.stop)
 
     stop = timeit.default_timer()
@@ -114,7 +75,7 @@ if __name__ == "__main__":
     parser.add_argument("--level", type=int, default=1)
     parser.add_argument("--remove_last_out", type=str2bool, nargs='?',
                         const=True, default=True)
-    parser.add_argument("--norm_prec", type=float, default=0.0000001)
+    #parser.add_argument("--norm_prec", type=float, default=0.0000001)
     parser.add_argument("--stop", type=int, default=10000)
 
     parser.add_argument("--save_metadata", type=str2bool, nargs='?',

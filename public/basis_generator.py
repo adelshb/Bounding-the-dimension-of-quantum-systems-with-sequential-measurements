@@ -13,11 +13,12 @@ def basis_gs(dim = 2,
             len_seq = 2,
             num_out = 2,
             remove_last_out = True,
-            prec = 1e-15,
-            stop = 100000):
+            #prec = 1e-5,
+            stop = 10000):
 
     count = 1
     X_basis = []
+    Norm = []
     X = rand_moment(dim,
                     num_obs,
                     len_seq,
@@ -27,6 +28,7 @@ def basis_gs(dim = 2,
 
     X = X/LA.norm(X)
     X_basis.append(X)
+    Norm.append(LA.norm(X))
 
     while True:
 
@@ -40,7 +42,8 @@ def basis_gs(dim = 2,
         for k in range(len(X_basis)):
             X -= X_basis[k]*np.sum(X_basis[k]*np.conjugate(X))
 
-        if LA.norm(X) < prec:
+        Norm.append(LA.norm(X))
+        if Norm[-1]/Norm[-2] < 1e-10:
             print("Nul matrix found")
             print("Number of LI moment matrices: ", len(X_basis))
             return X_basis
