@@ -12,7 +12,6 @@ from basis_generator import basis_gs
 #     --num_obs 2 \
 #     --len_seq 2 \
 #     --num_out 2 \
-#     --norm_prec 0.0000001 \
 #     --stop 10000 \
 #     --save_metadata True \
 #     --save_data True

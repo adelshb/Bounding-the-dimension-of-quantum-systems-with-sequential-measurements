@@ -13,49 +13,35 @@
 
  A scenario is defined by the number of measurements, the longest length of sequential measurements and the number of outcomes of the measurements.
 
- | Dimension | Number of measurements | Maximum length of sequences | Number of outcomes | Rank |
- | --------- | ---------------------- | --------------------------- | ------------------ | ---- |
- | 2  | 2 | 3 | 2 | 10 |
- | 2  | 3 | 2 | 2 | 22 |
- | 2  | 3 | 3 | 2 | 50 |
- | 2  | 3 | 4 | 2 | 95 |
- | 2  | 4 | 2 | 2 | 56 |
- | 2  | 5 | 2 | 2 | 121 |
- | 2  | 6 | 2 | 2 | 232 |
- | 3  | 3 | 2 | 2 | 28 |
- | 3  | 3 | 2 | 3 | 271 |
- | 3  | 3 | 3 | 2 | 106 |
- | 3  | 3 | 3 | 3 | 1435 |
- | 3  | 4 | 2 | 2 | 89 |
- | 3  | 4 | 2 | 3 | 1065 |
- | 3  | 5 | 2 | 2 | 226 |
- | 3  | 6 | 2 | 2 | 487 |
- | 4  | 3 | 2 | 2 | 28 |
- | 4  | 3 | 2 | 3 | 271 |
- | 4  | 3 | 3 | 2 | 106 |
- | 4  | 3 | 3 | 3 | 1878 |
- | 4  | 4 | 2 | 2 | 89 |
- | 4  | 4 | 2 | 3 | 1065 |
- | 4  | 5 | 2 | 2 | 226 |
- | 4  | 6 | 2 | 2 | 487 |
- | 5  | 3 | 2 | 3 | 271 |
- | 5  | 4 | 2 | 3 | 1065 |
-
  ### Example: Save the basis of moment matrices.
 
  ```shell
-python save_basis_multi-cores.py \
-   --dim 2 \
-   --num_obs 3 \
-   --len_seq 2 \
-   --out_max 1 \
-   --batch_init 100 \
-   --basis_size 20 \
-   --save True
+ python save_basis.py \
+     --dim 2 \
+     --num_obs 2 \
+     --len_seq 2 \
+     --num_out 2 \
+     --stop 10000 \
+     --save_metadata True \
+     --save_data True
+ ```
+
+ ### Example: Compute robustness of random moment matrices for chosen dimension with basis given a a specific level of the NPA hierarchy.
+
+ ```shell
+ python save_visibility.py \
+     --num_obs 3 \
+     --len_seq 2 \
+     --num_out 2 \
+     --dimX 3 \
+     --data_samp 10 \
+     --dim_base 2 \
+     --level 1 \
+     --basis_filename data_basis/2-dim-3-num_obs-2-len_seq-2-num_out.npy
  ```
 
  ### Example: Find the maximum violation of the Leggett-Garg inequality.
 
  ```shell
- python simplified_method/Leggett-Garg.py
+ python public/Leggett-Garg.py
  ```
