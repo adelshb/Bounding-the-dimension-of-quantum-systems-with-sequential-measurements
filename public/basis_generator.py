@@ -79,7 +79,7 @@ def rand_moment(dim=2,
             for j, seq_col in enumerate(sequences):
                 Pj= proj_mul([P[k] for k in seq_col[1]], seq_col[0])
                 X[i+1,j+1] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
-        return X
+        return X, rho, P
     else:
         X = np.zeros((len(sequences),len(sequences)), dtype=complex)
         for i, seq_row in enumerate(sequences):
@@ -87,7 +87,7 @@ def rand_moment(dim=2,
             for j, seq_col in enumerate(sequences):
                 Pj= proj_mul([P[k] for k in seq_col[1]], seq_col[0])
                 X[i,j] = np.trace(Pi @ np.conjugate(Pj.T) @ rho)
-        return X
+        return X, rho, P
 
 def rand_projs(dim, num_out):
     if dim == 1:
