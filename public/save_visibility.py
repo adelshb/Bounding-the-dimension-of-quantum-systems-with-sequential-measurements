@@ -28,16 +28,6 @@ def main(args):
     print("Parameters: {}.".format(args))
 
     X_basis = np.load(args.basis_filename)
-    # Etas = []
-    # for __ in range(args.data_samp):
-    #     X = rand_moment(args.dimX,
-    #                  args.num_obs,
-    #                  args.len_seq,
-    #                  args.num_out,
-    #                  sel_sequences = [args.len_seq, args.len_seq+args.level-1],
-    #                  remove_last_out = True)
-    #
-    #     Etas.append(single_behavior_visibility(X, X_basis))
 
     CPUs = multiprocessing.cpu_count()
     print("Number of CPUs: {}.".format(CPUs))
@@ -68,7 +58,7 @@ def main(args):
 def rand_moment2rand_vis(dimX, num_obs, len_seq, num_out, level, X_basis):
 
     scipy.random.seed()
-    X = rand_moment(dimX,
+    X, _, __ = rand_moment(dimX,
                  num_obs,
                  len_seq,
                  num_out,
@@ -102,7 +92,7 @@ def single_behavior_visibility(X, X_basis):
                       constraints)
 
     prob.solve(solver=cp.MOSEK, verbose=False)
-    return eta.value[0][0]
+    return eta.value[0][0]#, constraints
 
 if __name__ == "__main__":
     parser = ArgumentParser()

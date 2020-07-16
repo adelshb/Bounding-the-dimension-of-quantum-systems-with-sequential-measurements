@@ -19,20 +19,21 @@ def basis_gs(dim = 2,
     count = 1
     X_basis = []
     Norm = []
-    X = rand_moment(dim,
+    X, _, __ = rand_moment(dim,
                     num_obs,
                     len_seq,
                     num_out,
                     [len_seq],
                     remove_last_out)
 
+    print(X.shape)
     X = X/LA.norm(X)
     X_basis.append(X)
     Norm.append(LA.norm(X))
 
     while True:
 
-        X = rand_moment(dim,
+        X, _, __ = rand_moment(dim,
                     num_obs,
                     len_seq,
                     num_out,
