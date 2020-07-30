@@ -42,7 +42,7 @@ def main(args):
         meta_data["level"] = args.level
 
         dir_name = "data_basis/"
-        NAME = '{}-dim-{}-num_obs-{}-len_seq-{}-num_out'.format(args.dim, args.num_obs, args.len_seq, args.num_out)
+        NAME = '{}-dim-{}-num_obs-{}-len_seq-{}-num_out-{}-level'.format(args.dim, args.num_obs, args.len_seq, args.num_out, args.level)
 
         with open(dir_name + NAME + '-meta_data.json', 'w') as fp:
             json.dump(meta_data, fp)
