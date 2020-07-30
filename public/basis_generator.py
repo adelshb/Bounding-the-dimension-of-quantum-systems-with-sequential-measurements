@@ -12,6 +12,7 @@ def basis_gs(dim = 2,
             num_obs = 3,
             len_seq = 2,
             num_out = 2,
+            level = 1,
             remove_last_out = True,
             #prec = 1e-5,
             stop = 10000):
@@ -23,7 +24,7 @@ def basis_gs(dim = 2,
                     num_obs,
                     len_seq,
                     num_out,
-                    [len_seq],
+                    [len_seq, len_seq+level-1],
                     remove_last_out)
 
     print(X.shape)
@@ -37,7 +38,7 @@ def basis_gs(dim = 2,
                     num_obs,
                     len_seq,
                     num_out,
-                    [len_seq],
+                    [len_seq, len_seq+level-1],
                     remove_last_out)
 
         for k in range(len(X_basis)):

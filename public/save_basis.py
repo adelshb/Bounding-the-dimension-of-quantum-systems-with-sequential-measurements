@@ -24,6 +24,7 @@ def main(args):
                         args.num_obs,
                         args.len_seq,
                         args.num_out,
+                        args.level,
                         args.remove_last_out,
                         args.stop)
 
