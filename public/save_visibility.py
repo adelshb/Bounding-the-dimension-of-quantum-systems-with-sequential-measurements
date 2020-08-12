@@ -19,7 +19,7 @@ from basis_generator import rand_moment
 #     --data_samp 10 \
 #     --dim_base 2 \
 #     --level 1 \
-#     --basis_filename data_basis/2-dim-3-num_obs-2-len_seq-2-num_out.npy
+#     --basis_filename data_basis/2-dim-3-num_obs-2-len_seq-2-num_out-1-level.npy
 
 def main(args):
 
@@ -62,7 +62,7 @@ def rand_moment2rand_vis(dimX, num_obs, len_seq, num_out, level, X_basis):
                  num_obs,
                  len_seq,
                  num_out,
-                 sel_sequences = [len_seq, len_seq+level-1],
+                 sel_sequences = [len_seq],
                  remove_last_out = True)
 
     return single_behavior_visibility(X, X_basis)
