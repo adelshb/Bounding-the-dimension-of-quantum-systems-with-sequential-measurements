@@ -19,7 +19,7 @@ from basis_generator import rand_moment
 #     --data_samp 10 \
 #     --dim_base 2 \
 #     --level 1 \
-#     --basis_filename data_basis/2-dim-3-num_obs-2-len_seq-2-num_out-1-level.npy
+#     --basis_filename data/data_basis/2-dim-3-num_obs-2-len_seq-2-num_out-1-level.npy
 
 def main(args):
 
@@ -46,7 +46,7 @@ def main(args):
 
     NAME = '{}-num_obs-{}-len_seq-{}-out_max-{}-dim_behavior-{}-dim_base-{}-level'.format(args.num_obs, args.len_seq, args.num_out, args.dimX, args.dim_base, args.level)
 
-    with open("data_robustness/" + NAME + '.json', 'w') as fp:
+    with open("data/data_robustness/" + NAME + '.json', 'w') as fp:
         json.dump(data, fp, indent=2)
 
     print("Number of moment matrices generated and tested: {}.".format(len(Etas)))
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     parser.add_argument("--data_samp", type=int, default=100)
     parser.add_argument("--dim_base", type=int, default=2)
     parser.add_argument("--level", type=int, default=1)
-    parser.add_argument("--basis_filename", type=str, default="data_basis/2-dim-3-num_obs-2-len_seq-2-num_out.npy")
+    parser.add_argument("--basis_filename", type=str, default="data/data_basis/2-dim-3-num_obs-2-len_seq-2-num_out.npy")
 
     args = parser.parse_args()
     main(args)

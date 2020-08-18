@@ -5,6 +5,7 @@
  ## Requirements
  * Python 3.6+
  * CVXPY 1.0
+ * Seaborn
 
  ```shell
  pip install -r requirements.txt

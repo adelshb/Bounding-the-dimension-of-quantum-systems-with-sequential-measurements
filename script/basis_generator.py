@@ -14,7 +14,6 @@ def basis_gs(dim = 2,
             num_out = 2,
             level = 1,
             remove_last_out = True,
-            #prec = 1e-5,
             stop = 10000):
 
     count = 1
