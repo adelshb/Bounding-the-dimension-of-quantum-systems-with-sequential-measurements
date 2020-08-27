@@ -2,6 +2,7 @@ import os, json
 import matplotlib.pyplot as plt
 
 def plot_LI(path,
+            level=1,
             show_useful = False):
 
     data = parse_LI(path)
@@ -10,6 +11,9 @@ def plot_LI(path,
 
     fig = plt.figure(figsize=(17, 8))
     for MLO in data.keys():
+
+        if MLO[-1]==level:
+            continue
 
         if show_useful == True:
             if all(x == data[MLO]["LI num"][0] for x in data[MLO]["LI num"]):
@@ -54,5 +58,8 @@ def parse_LI(path):
     return data
 
 def read_MLO(js):
-    MLO = str(js["num of observables"]) +str(js["maximum length of sequences"]) +str(js["num of outcomes"])
+    try:
+        MLO = str(js["num of observables"]) +str(js["maximum length of sequences"]) +str(js["num of outcomes"]+"-"+str(js["level"])
+    except:
+        MLO = str(js["num of observables"]) +str(js["maximum length of sequences"]) +str(js["num of outcomes"]+"-1")
     return MLO
