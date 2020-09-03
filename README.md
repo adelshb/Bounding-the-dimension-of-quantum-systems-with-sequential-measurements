@@ -1,6 +1,6 @@
 # Bounding the dimension of quantum systems via sequential measurements
 
- Bounding the dimension of quantum systems with sequential measurements.
+ Bounding the dimension of quantum systems with sequential measurements. The optimizations are obtained with [MOSEK](https://www.mosek.com/) and can be changed whenever necessary
 
  ## Requirements
  * Python 3.6+
@@ -10,9 +10,6 @@
  ```shell
  pip install -r requirements.txt
  ```
- ## Sets of moments matrices for different dimension in different scenarios:
-
- A scenario is defined by the number of measurements, the longest length of sequential measurements and the number of outcomes of the measurements.
 
  ### Example: Save the basis of moment matrices.
 
@@ -27,7 +24,7 @@
      --save_data True
  ```
 
- ### Example: Compute robustness of random moment matrices for chosen dimension with basis given a a specific level of the NPA hierarchy.
+ ### Example: Compute the visibility of random moment matrices for a chosen dimension with given basis of moment matrices.
 
  ```shell
  python save_visibility.py \
@@ -41,8 +38,16 @@
      --basis_filename data_basis/2-dim-3-num_obs-2-len_seq-2-num_out.npy
  ```
 
- ### Example: Find the maximum violation of the Leggett-Garg inequality.
+ ### Example: Generate a random witness for between two specific dimensions in a chosen scenario
 
  ```shell
- python public/Leggett-Garg.py
+ python random_witness_generator.py \
+     --num_obs 3 \
+     --len_seq 2 \
+     --num_out 2 \
+     --dimX 3 \
+     --data_samp 100 \
+     --dim_base 2 \
+     --remove_last_out True \
+     --basis_filename data/data_basis/2-dim-3-num_obs-2-len_seq-2-num_out-1-level.npy
  ```
