@@ -38,9 +38,9 @@ def main(args):
     Q = np.real(np.diag(X)[1:] @ coef)
     C = NPA_bound(coef,X_basis)
 
-    print("visibility: " eta)
-    print("Value of the witness for the generated behavior: " Q)
-    print("Maximum value of the witness for characterized set: " C)
+    print("visibility: ", eta)
+    print("Value of the witness for the generated behavior: ", Q)
+    print("Maximum value of the witness for characterized set: ", C)
 
     data = {}
     data["Inequality"] = coef
