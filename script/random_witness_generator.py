@@ -3,6 +3,7 @@ import cvxpy as cp
 from basis_generator import rand_moment
 from argparse import ArgumentParser
 import json
+import timeit
 
 # Example:
 # python random_witness_generator.py \
@@ -10,7 +11,7 @@ import json
 #     --len_seq 2 \
 #     --num_out 2 \
 #     --dimX 3 \
-#     --num_sample 100 \
+#     --num_samples 100 \
 #     --dim_base 2 \
 #     --remove_last_out True \
 #     --basis_filename data/data_basis/2-dim-3-num_obs-2-len_seq-2-num_out-1-level.npy
@@ -26,7 +27,7 @@ def main(args):
     X, rho, P = rand_moment(args.dimX, args.num_obs, args.len_seq, args.num_out, [args.len_seq], args.remove_last_out)
     eta, coef = single_behavior_visibility(X, X_basis)
 
-    for __ in range(args.num_sample):
+    for __ in range(args.num_samples):
         X_t, rho_t, P_t = rand_moment(args.dimX, args.num_obs, args.len_seq, args.num_out, [args.len_seq], args.remove_last_out)
         eta_t, coef_t = single_behavior_visibility(X_t, X_basis)
         if eta_t < eta:
@@ -131,7 +132,7 @@ if __name__ == "__main__":
     parser.add_argument("--len_seq", type=int, default=2)
     parser.add_argument("--num_out", type=int, default=2)
     parser.add_argument("--dimX", type=int, default=3)
-    parser.add_argument("--num_sample", type=int, default=100)
+    parser.add_argument("--num_samples", type=int, default=100)
     parser.add_argument("--dim_base", type=int, default=2)
     parser.add_argument("--remove_last_out", type=str2bool, nargs='?',
                         const=True, default=True)
