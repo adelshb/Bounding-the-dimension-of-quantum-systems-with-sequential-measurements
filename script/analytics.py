@@ -21,10 +21,10 @@ def plot_LI(path,
             plt.scatter(data[MLO]["dimension"], data[MLO]["LI num"], zorder=2)
 
     plt.xticks(range(mind, maxd+1, 1))
-    plt.legend(title='MLO:', fontsize=20)
-    plt.xlabel('Dimension', fontsize=20)
-    plt.ylabel('Number of LI moment matrices', fontsize=20)
-    plt.tick_params(axis='both', labelsize=18)
+    plt.legend(title='MLO:', fontsize=29)
+    plt.xlabel('Dimension', fontsize=29)
+    plt.ylabel('Number of LI moment matrices', fontsize=29)
+    plt.tick_params(axis='both', labelsize=26)
     plt.show()
 
 def parse_LI(path):
@@ -60,4 +60,4 @@ def read_MLO(js):
         MLO = str(js["num of observables"]) + str(js["maximum length of sequences"]) + str(js["num of outcomes"]) + "-" + str(js["level"])
     except:
         MLO = str(js["num of observables"]) + str(js["maximum length of sequences"])  + str(js["num of outcomes"]) + "-1"
-    return MLO 
+    return MLO
