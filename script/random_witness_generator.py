@@ -10,7 +10,7 @@ import json
 #     --len_seq 2 \
 #     --num_out 2 \
 #     --dimX 3 \
-#     --data_samp 100 \
+#     --num_sample 100 \
 #     --dim_base 2 \
 #     --remove_last_out True \
 #     --basis_filename data/data_basis/2-dim-3-num_obs-2-len_seq-2-num_out-1-level.npy
