@@ -12,15 +12,13 @@ def plot_LI(path,
     fig = plt.figure(figsize=(17, 8))
     for MLO in data.keys():
 
-        if MLO[-1]==level:
-            continue
-
         if show_useful == True:
             if all(x == data[MLO]["LI num"][0] for x in data[MLO]["LI num"]):
                 continue
 
-        plt.plot(data[MLO]["dimension"], data[MLO]["LI num"], label=MLO, linewidth = 3, zorder=1)
-        plt.scatter(data[MLO]["dimension"], data[MLO]["LI num"], zorder=2)
+        if MLO[-1]==str(level):
+            plt.plot(data[MLO]["dimension"], data[MLO]["LI num"], label=MLO[:3], linewidth = 3, zorder=1)
+            plt.scatter(data[MLO]["dimension"], data[MLO]["LI num"], zorder=2)
 
     plt.xticks(range(mind, maxd+1, 1))
     plt.legend(title='MLO:', fontsize=20)
@@ -59,7 +57,7 @@ def parse_LI(path):
 
 def read_MLO(js):
     try:
-        MLO = str(js["num of observables"]) +str(js["maximum length of sequences"]) +str(js["num of outcomes"]+"-"+str(js["level"])
+        MLO = str(js["num of observables"]) + str(js["maximum length of sequences"]) + str(js["num of outcomes"]) + "-" + str(js["level"])
     except:
-        MLO = str(js["num of observables"]) +str(js["maximum length of sequences"]) +str(js["num of outcomes"]+"-1")
-    return MLO
+        MLO = str(js["num of observables"]) + str(js["maximum length of sequences"])  + str(js["num of outcomes"]) + "-1"
+    return MLO 
