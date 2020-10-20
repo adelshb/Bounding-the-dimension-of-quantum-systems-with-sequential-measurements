@@ -17,11 +17,11 @@ def plot_LI(path,
                 continue
 
         if MLO[-1]==str(level):
-            plt.plot(data[MLO]["dimension"], data[MLO]["LI num"], label=MLO[:3], linewidth = 3, zorder=1)
-            plt.scatter(data[MLO]["dimension"], data[MLO]["LI num"], zorder=2)
+            plt.plot(data[MLO]["dimension"], data[MLO]["LI num"], label=MLO[:3], linewidth = 6, zorder=1)
+            plt.scatter(data[MLO]["dimension"], data[MLO]["LI num"], s=200, zorder=2)
 
     plt.xticks(range(mind, maxd+1, 1))
-    plt.legend(title='MLO:', fontsize=29)
+    plt.legend(fontsize=29, loc='center left', bbox_to_anchor=(1, 0.5))
     plt.xlabel('Dimension', fontsize=29)
     plt.ylabel('Number of LI moment matrices', fontsize=29)
     plt.tick_params(axis='both', labelsize=26)
