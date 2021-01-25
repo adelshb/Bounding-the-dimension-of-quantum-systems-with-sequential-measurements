@@ -1,4 +1,4 @@
-# Bounding the dimension of quantum systems via sequential measurements
+# Bounding the dimension of quantum systems via sequential projective measurements
 
  Bounding the dimension of quantum systems with sequential measurements. The optimizations are obtained with [MOSEK](https://www.mosek.com/) and can be changed whenever necessary
 
