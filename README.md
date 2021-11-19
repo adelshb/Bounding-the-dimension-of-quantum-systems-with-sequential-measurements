@@ -51,3 +51,24 @@
      --remove_last_out True \
      --basis_filename data/data_basis/2-dim-3-num_obs-2-len_seq-2-num_out-1-level.npy
  ```
+
+## Citing
+
+ ```shell
+@article{2021,
+   title={Certifying dimension of quantum systems by sequential projective measurements},
+   volume={5},
+   ISSN={2521-327X},
+   url={http://dx.doi.org/10.22331/q-2021-06-10-472},
+   DOI={10.22331/q-2021-06-10-472},
+   journal={Quantum},
+   publisher={Verein zur Forderung des Open Access Publizierens in den Quantenwissenschaften},
+   author={Sohbi, Adel and Markham, Damian and Kim, Jaewan and Quintino, Marco Túlio},
+   year={2021},
+   month={Jun},
+   pages={472}
+}
+ ```
+
+## License
+[Apache License 2.0](https://github.com/adelshb/Bounding-the-dimension-of-quantum-systems-with-sequential-measurements/blob/master/LICENSE)
