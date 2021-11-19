@@ -1,6 +1,6 @@
 # Bounding the dimension of quantum systems via sequential projective measurements
 
- Bounding the dimension of quantum systems with sequential measurements. The optimizations are obtained with [MOSEK](https://www.mosek.com/) and can be changed whenever necessary
+ Bounding the dimension of quantum systems with sequential measurements. The optimizations are obtained with [MOSEK](https://www.mosek.com/) and can be changed whenever necessary. This repository has been used in the folowwing [reference](https://quantum-journal.org/papers/q-2021-06-10-472/).
 
  ## Requirements
  * Python 3.6+
